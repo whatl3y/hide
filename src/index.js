@@ -87,7 +87,10 @@ if (!config.cryptography.password) {
     process.exit()
 
   } catch(err) {
-    console.error(err)
+    if (typeof err === 'string')
+      Vomit.error(err)
+    else
+      console.error(err)
     process.exit()
   }
 })()

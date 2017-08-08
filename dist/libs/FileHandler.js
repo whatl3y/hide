@@ -41,7 +41,16 @@ exports.default = {
         const rawFileData = await readFilePromise(this.filepath);
         if (rawFileData.length === 0) return null;else {
           const inflatedString = await encryption.parseData(rawFileData.toString('utf8'), false);
-          return JSON.parse(encryption.decrypt(inflatedString.toString('utf8')));
+
+          try {
+            const accountsJson = JSON.parse(encryption.decrypt(inflatedString.toString('utf8')));
+            return accountsJson;
+          } catch (err) {
+            throw `We're having a problem parsing your flat file at '${this.filepath}'.
+              This is likely due to a different master password, environment variable CRYPT_SECRET,
+              being used that previously was set. Make sure you have the correct
+              secret you used before and try again.`.replace(/\n\s+/g, '\n');
+          }
         }
       } else {
         await writeFilePromise(this.filepath, '');

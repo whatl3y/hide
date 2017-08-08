@@ -11,9 +11,9 @@ export default {
     const newAccount = {
       [this.createUuid()]: {
         name:     name,
-        username: username,
-        password: password,
-        extra:    extraInfo
+        username: username || '',
+        password: password || '',
+        extra:    extraInfo || ''
       }
     }
 

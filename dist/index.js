@@ -95,7 +95,7 @@ if (!_config2.default.cryptography.password) {
 
     process.exit();
   } catch (err) {
-    console.error(err);
+    if (typeof err === 'string') _Vomit2.default.error(err);else console.error(err);
     process.exit();
   }
 })();
