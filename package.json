@@ -1,6 +1,6 @@
 {
-  "name": "hyd",
-  "version": "0.1.2",
+  "name": "hide",
+  "version": "3.0.0",
   "description": "CLI utility to store and retrieve account information securely on your machine.",
   "main": "dist/index.js",
   "engines": {
@@ -8,14 +8,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/whatl3y/hyd.git"
+    "url": "https://github.com/whatl3y/hide.git"
   },
   "scripts": {
     "build": "gulp build",
     "test": "mocha --compilers js:babel-core/register --recursive './src/**/*.spec.js'"
   },
   "bin": {
-    "hyd": "./dist/index.js"
+    "hide": "./dist/index.js"
   },
   "devDependencies": {
     "babel-core": "^6.24.1",
