@@ -1,6 +1,7 @@
 import minimist from 'minimist'
 import AccountMgmt from './libs/AccountMgmt'
 import FileHandler from './libs/FileHandler'
+import Import from './libs/Import'
 import Vomit from './libs/Vomit'
 import config from './config'
 
@@ -97,7 +98,26 @@ if (!config.cryptography.password) {
         } else {
           Vomit.error('Either a name (-n or --name) or uuid (-u or --uuid) parameter is a required at a minimum to show the details for an account.')
         }
-        
+
+        break
+
+      case 'import':
+        const importFilePath = argv.f || argv.filepath
+        if (FileHandler.doesFileExist(importFilePath)) {
+          let rows = await Import.csv(importFilePath)
+          const numAccounts = rows.length
+          while (rows.length > 0) {
+            const row = rows[0]
+            rows.shift()
+            if (row.name)
+              await AccountMgmt.addAccount(row.name, row.username, row.password, row.extra)
+          }
+          Vomit.success(`Successfully added ${numAccounts} accounts from CSV: ${importFilePath}!`)
+
+        } else {
+          Vomit.error(`We can't find filepath provided: ${importFilePath}`)
+        }
+
         break
 
       default:

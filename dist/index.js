@@ -14,6 +14,10 @@ var _FileHandler = require('./libs/FileHandler');
 
 var _FileHandler2 = _interopRequireDefault(_FileHandler);
 
+var _Import = require('./libs/Import');
+
+var _Import2 = _interopRequireDefault(_Import);
+
 var _Vomit = require('./libs/Vomit');
 
 var _Vomit2 = _interopRequireDefault(_Vomit);
@@ -107,6 +111,23 @@ if (!_config2.default.cryptography.password) {
           }
         } else {
           _Vomit2.default.error('Either a name (-n or --name) or uuid (-u or --uuid) parameter is a required at a minimum to show the details for an account.');
+        }
+
+        break;
+
+      case 'import':
+        const importFilePath = argv.f || argv.filepath;
+        if (_FileHandler2.default.doesFileExist(importFilePath)) {
+          let rows = await _Import2.default.csv(importFilePath);
+          const numAccounts = rows.length;
+          while (rows.length > 0) {
+            const row = rows[0];
+            rows.shift();
+            if (row.name) await _AccountMgmt2.default.addAccount(row.name, row.username, row.password, row.extra);
+          }
+          _Vomit2.default.success(`Successfully added ${numAccounts} accounts from CSV: ${importFilePath}!`);
+        } else {
+          _Vomit2.default.error(`We can't find filepath provided: ${importFilePath}`);
         }
 
         break;

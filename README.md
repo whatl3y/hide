@@ -26,10 +26,13 @@ bit encryption with a password I set.
 
 ## Config
 
-```js
-// The "master" secret used to encrypt the flat file with all your accounts and passwords.
-// !!!DON'T LOSE/FORGET THIS!!!
-process.env.CRYPT_SECRET
+The following environment variable should be set to control the global
+secret that's used with AES-256 to secure the data stored on your machine.
+
+!!!DON'T LOSE/FORGET THIS!!!
+
+```
+>export CRYPT_SECRET=[your all time master secret value]
 ```
 
 ## Usage
@@ -44,6 +47,7 @@ process.env.CRYPT_SECRET
 4. -e / --extra (optional): Any additional information you'd like to provide about the account.
 
 ```
+
 >hide add -n my_new_account -u myname -p the_secret_password -e "Some extra stuff!!!!"
 
 Successfully added account 'my_new_account'!
@@ -53,10 +57,10 @@ Successfully added account 'my_new_account'!
 ### Delete an account
 
 #### PARAMETERS
-Either uuid or name are at least required:
 1. -i / --uuid: The unique identifier of the account you want to review.
 
 ```
+
 >hide delete -i f62d5a21-4119-4a05-bced-0dca8f310d4b
 
 Successfully deleted account with uuid: 'f62d5a21-4119-4a05-bced-0dca8f310d4b'
@@ -76,6 +80,7 @@ Optional
 5. -e / --extra (optional): Any additional information you'd like to provide about the account.
 
 ```
+
 >hide update -n facebook.com -u fbuser -p my_password1
 
 Successfully updated account with name: 'facebook.com'!
@@ -91,6 +96,7 @@ a case-insensitive search against the NAME or USERNAME.
 NOTE: the `search` command never shows the password for the account. Use `show` to retrieve the password.
 
 ```
+
 >hide search
 
 I found the following accounts:
@@ -105,6 +111,7 @@ I found the following accounts:
 NAME                USERNAME        EXTRA            UUID                                
 facebook.com        userna                           def7f984-c2d7-4069-907c-facfad597123
 1 of 2 total accounts returned
+
 ```
 
 ### Show a single account
@@ -118,6 +125,7 @@ Optional
 3. -p / --password (optional): Whether to show the password. DEFAULT: false
 
 ```
+
 >hide show -i def7f984-c2d7-4069-907c-facfad597123
 >hide show -n facebook.com
 
@@ -128,6 +136,27 @@ facebook.com    fbuser                          f62d5a21-4119-4a05-bced-0dca8f31
 
 NAME            USERNAME        PASSWORD        EXTRA           UUID                                
 facebook.com    fbuser          my_password1                    f62d5a21-4119-4a05-bced-0dca8f310d4b
+
+```
+
+### Import from a CSV
+
+Note: This requires the CSV have headers that match the following:
+
+name: the account name
+username: the username of the account
+password: the password of the account
+extra: any desired extra information you want to provide
+
+#### Parameters
+1. -f / --filepath: The full filepath of the CSV that we're importing data from.
+
+```
+
+>hide import -f /Users/yourname/myfile.csv
+
+Successfully added 123 accounts from CSV: /Users/yourname/myfile.csv!
+
 ```
 
 ## Development
