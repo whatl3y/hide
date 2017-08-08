@@ -1,0 +1,61 @@
+import util from 'util'
+import fs from 'fs'
+import path from 'path'
+import Encryption from './Encryption'
+import config from '../config'
+
+const mkdirPromise = util.promisify(fs.mkdir)
+const writeFilePromise = util.promisify(fs.writeFile)
+const readFilePromise = util.promisify(fs.readFile)
+
+const encryption = Encryption()
+
+export default {
+  filepath: path.join(config.filepath, config.filename),
+
+  async getAndDecryptFlatFile() {
+    if (this.doesDirectoryExist(config.filepath)) {
+      if (this.doesFileExist(this.filepath)) {
+        const rawFileData = await readFilePromise(this.filepath)
+        if (rawFileData.length === 0)
+          return null
+        else {
+          const inflatedString = await encryption.parseData(rawFileData.toString('utf8'), false)
+          return JSON.parse(encryption.decrypt(inflatedString.toString('utf8')))
+        }
+      } else {
+        await writeFilePromise(this.filepath, '')
+        return null
+      }
+    }
+
+    await mkdirPromise(config.filepath)
+    await writeFilePromise(this.filepath, '')
+    return ''
+  },
+
+  async writeObjToFile(obj, origObj={}) {
+    const newObj          = Object.assign(obj, origObj)
+    const encryptedString = encryption.encrypt(JSON.stringify(newObj))
+    const deflatedString  = await encryption.parseData(encryptedString)
+    return await writeFilePromise(this.filepath, deflatedString)
+  },
+
+  doesDirectoryExist(dirPath) {
+    try {
+      const exists = fs.statSync(dirPath).isDirectory()
+      return exists
+    } catch(e) {
+      return false
+    }
+  },
+
+  doesFileExist(filePath) {
+    try {
+      const exists = fs.statSync(filePath).isFile()
+      return exists
+    } catch(e) {
+      return false
+    }
+  }
+}
