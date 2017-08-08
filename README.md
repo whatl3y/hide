@@ -26,37 +26,10 @@ bit encryption with a password I set.
 
 ## Config
 
-The following environment variables can be used to configure
-how and where passwords are stored.
-
-The only required environment variables
-
 ```js
-// REQUIRED
-// The "master" secret used to encrypt the flat file with
-// all your accounts and passwords.
-// !!!Make sure you don't lose this, or you can't decrypt your accounts!!!
+// The "master" secret used to encrypt the flat file with all your accounts and passwords.
+// !!!DON'T LOSE/FORGET THIS!!!
 process.env.CRYPT_SECRET
-
-// optional
-// The cipher to use to encrypt the accounts flat file
-// https://nodejs.org/api/crypto.html#crypto_crypto_getciphers
-// default: 'aes-256-ctr'
-process.env.CRYPT_ALGORITHM
-
-// optional
-// The filepath on your machine where the encrypted flat files that
-// store your information will reside.
-// default: ./files
-process.env.PASSWORDS_FILEPATH
-
-// optional
-// The name of the file on your machine where the encrypted flat files that
-// store your information will reside.
-// NOTE: this is only the filename and NOT the full path (path.join is
-// used to build the full path using PASSWORDS_FILEPATH + PASSWORDS_FILENAME)
-// default: __node-passwords
-process.env.PASSWORDS_FILENAME
 ```
 
 ## Usage
@@ -74,11 +47,40 @@ process.env.PASSWORDS_FILENAME
 >hide add -n my_new_account -u myname -p the_secret_password -e "Some extra stuff!!!!"
 
 Successfully added account 'my_new_account'!
+
+```
+
+### Delete an account
+
+#### PARAMETERS
+Either uuid or name are at least required:
+1. -i / --uuid: The unique identifier of the account you want to review.
+
+```
+>hide delete -i f62d5a21-4119-4a05-bced-0dca8f310d4b
+
+Successfully deleted account with uuid: 'f62d5a21-4119-4a05-bced-0dca8f310d4b'
+
 ```
 
 ### Update an account
 
 #### Parameters
+Either uuid or name are at least required:
+1. -i / --uuid: The unique identifier of the account you want to review.
+2. -n / --name: The name of the account you're storing. It can be any alphanumeric characters.
+
+Optional
+3. -u / --username (optional): The username for the account.
+4. -p / --password (optional): The password for the account.
+5. -e / --extra (optional): Any additional information you'd like to provide about the account.
+
+```
+>hide update -n facebook.com -u fbuser -p my_password1
+
+Successfully updated account with name: 'facebook.com'!
+
+```
 
 ### Search your accounts
 
@@ -90,6 +92,7 @@ NOTE: the `search` command never shows the password for the account. Use `show` 
 
 ```
 >hide search
+
 I found the following accounts:
 NAME                USERNAME        EXTRA            UUID                                
 facebook.com        userna                           def7f984-c2d7-4069-907c-facfad597123
@@ -97,6 +100,7 @@ instagram.com       iguser                           def7f984-abc1-1111-2222-fac
 2 of 2 total accounts returned
 
 >hide search -s facebook
+
 I found the following accounts:
 NAME                USERNAME        EXTRA            UUID                                
 facebook.com        userna                           def7f984-c2d7-4069-907c-facfad597123
@@ -107,15 +111,23 @@ facebook.com        userna                           def7f984-c2d7-4069-907c-fac
 
 #### Parameters
 Either uuid or name are at least required:
-
 1. -i / --uuid: The unique identifier of the account you want to review.
 2. -n / --name: The name of the account you're reviewing.
+
+Optional
 3. -p / --password (optional): Whether to show the password. DEFAULT: false
 
 ```
 >hide show -i def7f984-c2d7-4069-907c-facfad597123
-
 >hide show -n facebook.com
+
+NAME            USERNAME        EXTRA           UUID                                
+facebook.com    fbuser                          f62d5a21-4119-4a05-bced-0dca8f310d4b
+
+>hide show -n facebook.com -p
+
+NAME            USERNAME        PASSWORD        EXTRA           UUID                                
+facebook.com    fbuser          my_password1                    f62d5a21-4119-4a05-bced-0dca8f310d4b
 ```
 
 ## Development
