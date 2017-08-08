@@ -31,6 +31,9 @@ var _config2 = _interopRequireDefault(_config);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+const inflate = _util2.default.promisify(_zlib2.default.inflate);
+const deflate = _util2.default.promisify(_zlib2.default.deflate);
+
 function Encryption(options = {}) {
   return {
     _algorithm: options.algorithm || _config2.default.cryptography.algorithm,
@@ -80,9 +83,6 @@ function Encryption(options = {}) {
     // NOTE: if inflating, we will always return a raw Buffer. If deflating,
     // we return a base64 encoded string.
     async parseData(value, isRawData = true) {
-      const inflate = _util2.default.promisify(_zlib2.default.inflate);
-      const deflate = _util2.default.promisify(_zlib2.default.deflate);
-
       let returnValue;
       switch (isRawData) {
         case false:

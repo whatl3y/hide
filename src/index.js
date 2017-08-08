@@ -16,16 +16,14 @@ if (!config.cryptography.password) {
 
 ;(async () => {
   try {
-    // common command line parameters
-    const name = argv.n || argv.name
-    const password = argv.p || argv.password
-    const uid = argv.u || argv.uuid
+    const extra     = argv.e || argv.extra
+    const name      = argv.n || argv.name
+    const password  = argv.p || argv.password
+    const uid       = argv.i || argv.id || argv.uuid
+    const username  = argv.u || argv.username
 
     switch (command) {
       case 'add':
-        const username = argv.u || argv.username
-        const extra = argv.e || argv.extra
-
         if (!name)
           return Vomit.error('An account name (-n or --name) parameter is a required at a minimum to add a new account.')
 
@@ -47,7 +45,7 @@ if (!config.cryptography.password) {
         break
 
       case 'search':
-        const searchString = argv.s
+        const searchString = argv.s || argv.search
         const info = await AccountMgmt.searchForAccountsByName(searchString)
         Vomit.listAccounts(info.matches, info.total)
         break
@@ -80,7 +78,25 @@ if (!config.cryptography.password) {
         break
 
       case 'update':
-
+      if (uid) {
+        const account = await AccountMgmt.findAccountByUuid(uid)
+        if (account) {
+          await AccountMgmt.updateAccount(uid, {name: name, username: username, password: password, extra: extra}, account)
+          Vomit.success(`Successfully updated account with uuid: '${uid}'!`)
+        } else {
+          Vomit.error(`We didn't find an account with uuid: ${uid}`)
+        }
+      } else if (name) {
+        const account = await AccountMgmt.findAccountByName(name)
+        if (account) {
+          await AccountMgmt.updateAccount(account.uuid, {name: name, username: username, password: password, extra: extra}, account)
+          Vomit.success(`Successfully updated account with name: '${name}'!`)
+        } else {
+          Vomit.error(`We didn't find an account with name: ${name}`)
+        }
+      } else {
+        return Vomit.error('Either a name (-n or --name) or uuid (-u or --uuid) parameter is a required at a minimum to show the details for an account.')
+      }
         break
     }
 

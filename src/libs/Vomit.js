@@ -12,19 +12,21 @@ export default {
   },
 
   listSingleAccount(accountRecord) {
-    this.wrapInNewlines(() => console.log(columnify([accountRecord]).green))
+    this.wrapInNewlines(() => console.log(this.columnify([accountRecord]).green))
   },
 
   listAccounts(accountsAry=[], totalNumAccounts=0) {
     const accounts = accountsAry.map(a => {
       if (typeof a === 'string')
         return {name: a}
-      return {name: a.name, username: a.username, uuid: a.uuid}
+
+      delete(a.password)
+      return a
     })
 
     this.wrapInNewlines(() => {
       console.log("I found the following accounts:".blue)
-      console.log(columnify(accounts).green)
+      console.log(this.columnify(accounts).green)
       console.log(`${accountsAry.length} of ${totalNumAccounts} total accounts returned`.blue)
     })
   },
@@ -42,5 +44,11 @@ export default {
     if (howMany > 0) console.log(newlineString)
     functionToWriteMoreOutput()
     if (howMany > 0) console.log(newlineString)
+  },
+
+  columnify(data) {
+    return columnify(data, {
+      minWidth: 15
+    })
   }
 }

@@ -34,16 +34,14 @@ if (!_config2.default.cryptography.password) {
 
 ;(async () => {
   try {
-    // common command line parameters
+    const extra = argv.e || argv.extra;
     const name = argv.n || argv.name;
     const password = argv.p || argv.password;
-    const uid = argv.u || argv.uuid;
+    const uid = argv.i || argv.id || argv.uuid;
+    const username = argv.u || argv.username;
 
     switch (command) {
       case 'add':
-        const username = argv.u || argv.username;
-        const extra = argv.e || argv.extra;
-
         if (!name) return _Vomit2.default.error('An account name (-n or --name) parameter is a required at a minimum to add a new account.');
 
         await _AccountMgmt2.default.addAccount(name, username, password, extra);
@@ -60,7 +58,7 @@ if (!_config2.default.cryptography.password) {
         break;
 
       case 'search':
-        const searchString = argv.s;
+        const searchString = argv.s || argv.search;
         const info = await _AccountMgmt2.default.searchForAccountsByName(searchString);
         _Vomit2.default.listAccounts(info.matches, info.total);
         break;
@@ -89,7 +87,25 @@ if (!_config2.default.cryptography.password) {
         break;
 
       case 'update':
-
+        if (uid) {
+          const account = await _AccountMgmt2.default.findAccountByUuid(uid);
+          if (account) {
+            await _AccountMgmt2.default.updateAccount(uid, { name: name, username: username, password: password, extra: extra }, account);
+            _Vomit2.default.success(`Successfully updated account with uuid: '${uid}'!`);
+          } else {
+            _Vomit2.default.error(`We didn't find an account with uuid: ${uid}`);
+          }
+        } else if (name) {
+          const account = await _AccountMgmt2.default.findAccountByName(name);
+          if (account) {
+            await _AccountMgmt2.default.updateAccount(account.uuid, { name: name, username: username, password: password, extra: extra }, account);
+            _Vomit2.default.success(`Successfully updated account with name: '${name}'!`);
+          } else {
+            _Vomit2.default.error(`We didn't find an account with name: ${name}`);
+          }
+        } else {
+          return _Vomit2.default.error('Either a name (-n or --name) or uuid (-u or --uuid) parameter is a required at a minimum to show the details for an account.');
+        }
         break;
     }
 

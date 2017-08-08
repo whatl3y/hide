@@ -1,6 +1,5 @@
 import uuidv4 from 'uuid/v4'
 import FileHandler from './FileHandler'
-import config from '../config'
 
 export default {
   createUuid() {
@@ -16,9 +15,21 @@ export default {
         extra:    extraInfo || ''
       }
     }
-
     const rawAccountInfo = await FileHandler.getAndDecryptFlatFile()
     return await FileHandler.writeObjToFile(newAccount, rawAccountInfo || {})
+  },
+
+  async updateAccount(uuid, updatedInformation={}, originalInformation={}) {
+    const updatedAccount = {
+      [uuid]: {
+        name:     updatedInformation.name || originalInformation.name || '',
+        username: updatedInformation.username || originalInformation.username || '',
+        password: updatedInformation.password || originalInformation.password || '',
+        extra:    updatedInformation.extra || originalInformation.extra || ''
+      }
+    }
+    const rawAccountInfo = await FileHandler.getAndDecryptFlatFile()
+    return await FileHandler.writeObjToFile(updatedAccount, rawAccountInfo || {})
   },
 
   async deleteAccountByUuid(uid) {

@@ -1,7 +1,7 @@
 {
-  "name": "node-passwords",
+  "name": "node-pw",
   "version": "0.1.0",
-  "description": "Store passwords securely on your machine and retrieve them as needed.",
+  "description": "CLI utility to store and retrieve passwords securely on your machine.",
   "main": "dist/index.js",
   "engines": {
     "node": "8.2.1"
@@ -11,7 +11,7 @@
     "url": "https://github.com/whatl3y/passwords.git"
   },
   "scripts": {
-    "postinstall": "gulp build",
+    "build": "gulp build",
     "test": "mocha --compilers js:babel-core/register --recursive './src/**/*.spec.js'"
   },
   "devDependencies": {

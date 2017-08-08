@@ -64,7 +64,7 @@ exports.default = {
   },
 
   async writeObjToFile(obj, origObj = {}) {
-    const newObj = Object.assign(obj, origObj);
+    const newObj = Object.assign(origObj, obj);
     const encryptedString = encryption.encrypt(JSON.stringify(newObj));
     const deflatedString = await encryption.parseData(encryptedString);
     return await writeFilePromise(this.filepath, deflatedString);

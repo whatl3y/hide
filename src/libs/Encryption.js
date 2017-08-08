@@ -5,6 +5,9 @@ import zlib from 'zlib'
 import bcrypt from 'bcrypt'
 import config from '../config'
 
+const inflate = util.promisify(zlib.inflate)
+const deflate = util.promisify(zlib.deflate)
+
 export default function Encryption(options={}) {
   return {
     _algorithm: options.algorithm || config.cryptography.algorithm,
@@ -54,9 +57,6 @@ export default function Encryption(options={}) {
     // NOTE: if inflating, we will always return a raw Buffer. If deflating,
     // we return a base64 encoded string.
     async parseData(value, isRawData=true) {
-      const inflate = util.promisify(zlib.inflate)
-      const deflate = util.promisify(zlib.deflate)
-
       let returnValue
       switch (isRawData) {
         case false:

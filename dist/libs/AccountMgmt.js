@@ -12,10 +12,6 @@ var _FileHandler = require('./FileHandler');
 
 var _FileHandler2 = _interopRequireDefault(_FileHandler);
 
-var _config = require('../config');
-
-var _config2 = _interopRequireDefault(_config);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = {
@@ -32,9 +28,21 @@ exports.default = {
         extra: extraInfo || ''
       }
     };
-
     const rawAccountInfo = await _FileHandler2.default.getAndDecryptFlatFile();
     return await _FileHandler2.default.writeObjToFile(newAccount, rawAccountInfo || {});
+  },
+
+  async updateAccount(uuid, updatedInformation = {}, originalInformation = {}) {
+    const updatedAccount = {
+      [uuid]: {
+        name: updatedInformation.name || originalInformation.name || '',
+        username: updatedInformation.username || originalInformation.username || '',
+        password: updatedInformation.password || originalInformation.password || '',
+        extra: updatedInformation.extra || originalInformation.extra || ''
+      }
+    };
+    const rawAccountInfo = await _FileHandler2.default.getAndDecryptFlatFile();
+    return await _FileHandler2.default.writeObjToFile(updatedAccount, rawAccountInfo || {});
   },
 
   async deleteAccountByUuid(uid) {
