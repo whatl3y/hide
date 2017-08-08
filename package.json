@@ -1,5 +1,5 @@
 {
-  "name": "hide",
+  "name": "hyd",
   "version": "0.1.0",
   "description": "CLI utility to store and retrieve account information securely on your machine.",
   "main": "dist/index.js",
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/whatl3y/passwords.git"
+    "url": "https://github.com/whatl3y/hyd.git"
   },
   "scripts": {
     "build": "gulp build",

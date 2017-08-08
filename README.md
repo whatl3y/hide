@@ -1,4 +1,4 @@
-# hide
+# hyd
 
 CLI utility to store and retrieve account information securely on your machine.
 
@@ -21,7 +21,7 @@ bit encryption with a password I set.
 ## Install
 
 ```
->npm install -g pw
+>npm install -g hyd
 ```
 
 ## Config
@@ -71,12 +71,14 @@ process.env.PASSWORDS_FILENAME
 4. -e / --extra (optional): Any additional information you'd like to provide about the account.
 
 ```
->hide add -n my_new_account -u myname -p the_secret_password -e "Some extra stuff!!!!"
+>hyd add -n my_new_account -u myname -p the_secret_password -e "Some extra stuff!!!!"
 
 Successfully added account 'my_new_account'!
 ```
 
 ### Update an account
+
+#### Parameters
 
 ### Search your accounts
 
@@ -87,21 +89,34 @@ a case-insensitive search against the NAME or USERNAME.
 NOTE: the `search` command never shows the password for the account. Use `show` to retrieve the password.
 
 ```
->hide search
+>hyd search
 I found the following accounts:
 NAME                USERNAME        EXTRA            UUID                                
 facebook.com        userna                           def7f984-c2d7-4069-907c-facfad597123
 instagram.com       iguser                           def7f984-abc1-1111-2222-facfad597123
-1 of 2 total accounts returned
+2 of 2 total accounts returned
 
->hide search [[-s or --search] term]
+>hyd search -s facebook
 I found the following accounts:
 NAME                USERNAME        EXTRA            UUID                                
 facebook.com        userna                           def7f984-c2d7-4069-907c-facfad597123
 1 of 2 total accounts returned
 ```
 
-### Show information about a single account
+### Show a single account
+
+#### Parameters
+Either uuid or name are at least required:
+
+1. -i / --uuid: The unique identifier of the account you want to review.
+2. -n / --name: The name of the account you're reviewing.
+3. -p / --password (optional): Whether to show the password. DEFAULT: false
+
+```
+>hyd show -i def7f984-c2d7-4069-907c-facfad597123
+
+>hyd show -n facebook.com
+```
 
 ## Development
 
@@ -110,7 +125,7 @@ using the following command.
 
 ### Build
 
-Building the files requires gulp.
+Building the files (updates /dist) requires gulp.
 
 ```
 >npm run build

@@ -72,32 +72,36 @@ if (!config.cryptography.password) {
             Vomit.error(`We didn't find an account with name: ${name}`)
           }
         } else {
-          return Vomit.error('Either a name (-n or --name) or uuid (-u or --uuid) parameter is a required at a minimum to show the details for an account.')
+          Vomit.error('Either a name (-n or --name) or uuid (-u or --uuid) parameter is a required at a minimum to show the details for an account.')
         }
 
         break
 
       case 'update':
-      if (uid) {
-        const account = await AccountMgmt.findAccountByUuid(uid)
-        if (account) {
-          await AccountMgmt.updateAccount(uid, {name: name, username: username, password: password, extra: extra}, account)
-          Vomit.success(`Successfully updated account with uuid: '${uid}'!`)
+        if (uid) {
+          const account = await AccountMgmt.findAccountByUuid(uid)
+          if (account) {
+            await AccountMgmt.updateAccount(uid, {name: name, username: username, password: password, extra: extra}, account)
+            Vomit.success(`Successfully updated account with uuid: '${uid}'!`)
+          } else {
+            Vomit.error(`We didn't find an account with uuid: ${uid}`)
+          }
+        } else if (name) {
+          const account = await AccountMgmt.findAccountByName(name)
+          if (account) {
+            await AccountMgmt.updateAccount(account.uuid, {name: name, username: username, password: password, extra: extra}, account)
+            Vomit.success(`Successfully updated account with name: '${name}'!`)
+          } else {
+            Vomit.error(`We didn't find an account with name: ${name}`)
+          }
         } else {
-          Vomit.error(`We didn't find an account with uuid: ${uid}`)
+          Vomit.error('Either a name (-n or --name) or uuid (-u or --uuid) parameter is a required at a minimum to show the details for an account.')
         }
-      } else if (name) {
-        const account = await AccountMgmt.findAccountByName(name)
-        if (account) {
-          await AccountMgmt.updateAccount(account.uuid, {name: name, username: username, password: password, extra: extra}, account)
-          Vomit.success(`Successfully updated account with name: '${name}'!`)
-        } else {
-          Vomit.error(`We didn't find an account with name: ${name}`)
-        }
-      } else {
-        return Vomit.error('Either a name (-n or --name) or uuid (-u or --uuid) parameter is a required at a minimum to show the details for an account.')
-      }
+        
         break
+
+      default:
+        Vomit.error(`I don't recognize what you are trying to do.\nPlease refer to the documentation for what commands I support.`)
     }
 
     process.exit()

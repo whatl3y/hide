@@ -81,7 +81,7 @@ if (!_config2.default.cryptography.password) {
             _Vomit2.default.error(`We didn't find an account with name: ${name}`);
           }
         } else {
-          return _Vomit2.default.error('Either a name (-n or --name) or uuid (-u or --uuid) parameter is a required at a minimum to show the details for an account.');
+          _Vomit2.default.error('Either a name (-n or --name) or uuid (-u or --uuid) parameter is a required at a minimum to show the details for an account.');
         }
 
         break;
@@ -104,9 +104,13 @@ if (!_config2.default.cryptography.password) {
             _Vomit2.default.error(`We didn't find an account with name: ${name}`);
           }
         } else {
-          return _Vomit2.default.error('Either a name (-n or --name) or uuid (-u or --uuid) parameter is a required at a minimum to show the details for an account.');
+          _Vomit2.default.error('Either a name (-n or --name) or uuid (-u or --uuid) parameter is a required at a minimum to show the details for an account.');
         }
+
         break;
+
+      default:
+        _Vomit2.default.error(`I don't recognize what you are trying to do.\nPlease refer to the documentation for what commands I support.`);
     }
 
     process.exit();
