@@ -1,4 +1,3 @@
-import util from 'util'
 import fs from 'fs'
 import path from 'path'
 import promisify from 'es6-promisify'

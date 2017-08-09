@@ -37,16 +37,14 @@ secret that's used with AES-256 to secure the data stored on your machine.
 ```
 
 #### NODE_HIDE_FILEPATH
-Directory where the encrypted file will live
-default: home directory (either process.env.HOME or process.env.USERPROFILE on windows)
+Directory where the encrypted file will live -- default: home directory (either process.env.HOME on unix/linux/mac or process.env.USERPROFILE on windows)
 
 ```
 >export NODE_HIDE_FILEPATH=~
 ```
 
 #### NODE_HIDE_FILENAME
-Directory where the encrypted file will live
-default: '\_\_node-hide-accounts'
+Name of flat file that holds the encrypted data of your accounts -- default: '\_\_node-hide-accounts'
 
 ```
 >export NODE_HIDE_FILENAME=my_encrypted_file
@@ -182,8 +180,6 @@ If you want to clone and add/update functionality, you can build
 using the following command.
 
 ### Build
-
-Building the files (updates /dist) requires gulp.
 
 ```
 >npm run build
