@@ -1,6 +1,6 @@
 {
   "name": "hide",
-  "version": "3.0.10",
+  "version": "3.0.11",
   "description": "CLI utility to store and retrieve account information securely on your machine.",
   "main": "dist/index.js",
   "engines": {
