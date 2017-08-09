@@ -38,7 +38,7 @@ secret that's used with AES-256 to secure the data stored on your machine.
 
 #### NODE_HIDE_FILEPATH
 Directory where the encrypted file will live
-default: '~'
+default: home directory (either process.env.HOME or process.env.USERPROFILE on windows)
 
 ```
 >export NODE_HIDE_FILEPATH=~
