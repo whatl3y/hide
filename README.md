@@ -27,8 +27,7 @@ bit encryption with a password I set.
 ## Config
 
 #### CRYPT_SECRET (required)
-The following should be set to control the global
-secret that's used with AES-256 to secure the data stored on your machine.
+The following should be set to control the global secret that's used with AES-256 to secure the data stored on your machine.
 
 !!!DON'T LOSE/FORGET THIS!!!
 
@@ -54,9 +53,9 @@ Name of flat file that holds the encrypted data of your accounts -- default: '\_
 
 ### Add an account
 
-#### Parameters
+#### PARAMETERS
 
-- -n / --name (REQUIRED): The name of the account you're storing. It can be any alphanumeric characters.
+- -n / --name (REQUIRED): The name of the account you're storing. It can be any combination of alphanumeric characters.
 - -u / --username (optional): The username for the account.
 - -p / --password (optional): The password for the account.
 - -e / --extra (optional): Any additional information you'd like to provide about the account.
@@ -71,7 +70,7 @@ Successfully added account 'my_new_account'!
 
 ### Search your accounts
 
-#### Parameters
+#### PARAMETERS
 
 - -s / --search (optional): An optional term to look for accounts based on
 a case-insensitive search against the NAME or USERNAME.
@@ -98,7 +97,7 @@ facebook.com        userna                           def7f984-c2d7-4069-907c-fac
 
 ### Show a single account
 
-#### Parameters
+#### PARAMETERS
 Either uuid or name are at least required:
 - -i / --uuid: The unique identifier of the account you want to review.
 - -n / --name: The name of the account you're reviewing.
@@ -108,7 +107,7 @@ Optional
 
 ```
 
->hide show -i def7f984-c2d7-4069-907c-facfad597123
+>hide show -i f62d5a21-4119-4a05-bced-0dca8f310d4b
 >hide show -n facebook.com
 
 NAME            USERNAME        EXTRA           UUID                                
@@ -123,10 +122,10 @@ facebook.com    fbuser          my_password1                    f62d5a21-4119-4a
 
 ### Update an account
 
-#### Parameters
+#### PARAMETERS
 Either uuid or name are at least required:
-- -i / --uuid: The unique identifier of the account you want to review.
-- -n / --name: The name of the account you're storing. It can be any alphanumeric characters.
+- -i / --uuid: The unique identifier of the account you want to update.
+- -n / --name: The name of the account you're updating.
 
 Optional
 - -u / --username (optional): The username for the account.
@@ -144,7 +143,7 @@ Successfully updated account with name: 'facebook.com'!
 ### Delete an account
 
 #### PARAMETERS
-- -i / --uuid: The unique identifier of the account you want to review.
+- -i / --uuid: The unique identifier of the account you want to delete.
 
 ```
 
@@ -158,6 +157,9 @@ Successfully deleted account with uuid: 'f62d5a21-4119-4a05-bced-0dca8f310d4b'
 
 Returns the file location on your machine where the
 encrypted file lives.
+
+#### PARAMETERS
+None
 
 ```
 
@@ -175,9 +177,9 @@ Note: This requires the CSV have headers that match the following:
 name: the account name
 username: the username of the account
 password: the password of the account
-extra: any desired extra information you want to provide
+extra: any desired extra information you want to store with the account
 
-#### Parameters
+#### PARAMETERS
 - -f / --filepath: The full filepath of the CSV that we're importing data from.
 
 ```
@@ -191,7 +193,7 @@ Successfully added 123 accounts from CSV: /Users/yourname/myfile.csv!
 ## Development
 
 If you want to clone and add/update functionality, you can build
-using the following command.
+using the following.
 
 ### Build
 

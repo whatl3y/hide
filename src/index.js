@@ -8,7 +8,7 @@ import config from './config'
 
 // Ex. >node dist/index search -s my_search_string
 const argv = minimist(process.argv.slice(2))
-const [command] = argv._
+const [ command, second, third ] = argv._
 
 // we want to enforce CRYPT_SECRET to be set manually
 if (!config.cryptography.password) {
@@ -47,7 +47,7 @@ if (!config.cryptography.password) {
         break
 
       case 'search':
-        const searchString = argv.s || argv.search
+        const searchString = argv.s || argv.search || second
         const info = await AccountMgmt.searchForAccountsByName(searchString)
         Vomit.listAccounts(info.matches, info.total)
         break
@@ -62,14 +62,15 @@ if (!config.cryptography.password) {
           }
           return Vomit.error(`We didn't find an account with uuid: ${uid}`)
 
-        } else if (name) {
-          const account = await AccountMgmt.findAccountByName(name)
+        } else if (name || second) {
+          const nameStringToTry = name || second
+          const account = await AccountMgmt.findAccountByName(nameStringToTry)
           if (account) {
             if (!password)
               delete(account.password)
             return Vomit.listSingleAccount(account)
           }
-          return Vomit.error(`We didn't find an account with name: ${name}`)
+          return Vomit.error(`We didn't find an account with name: ${nameStringToTry}`)
         }
         Vomit.error('Either a name (-n or --name) or uuid (-u or --uuid) parameter is a required at a minimum to show the details for an account.')
 
@@ -102,7 +103,7 @@ if (!config.cryptography.password) {
         break
 
       case 'import':
-        const importFilePath = argv.f || argv.filepath
+        const importFilePath = argv.f || argv.filepath || second
         if (importFilePath && FileHandler.doesFileExist(importFilePath)) {
           let rows = await Import.csv(importFilePath)
           const numAccounts = rows.length
