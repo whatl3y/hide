@@ -26,13 +26,30 @@ bit encryption with a password I set.
 
 ## Config
 
-The following environment variable should be set to control the global
+#### CRYPT_SECRET (required)
+The following should be set to control the global
 secret that's used with AES-256 to secure the data stored on your machine.
 
 !!!DON'T LOSE/FORGET THIS!!!
 
 ```
 >export CRYPT_SECRET=[your all time master secret value]
+```
+
+#### NODE_HIDE_FILEPATH
+Directory where the encrypted file will live
+default: '~'
+
+```
+>export NODE_HIDE_FILEPATH=~
+```
+
+#### NODE_HIDE_FILENAME
+Directory where the encrypted file will live
+default: '\_\_node-hide-accounts'
+
+```
+>export NODE_HIDE_FILENAME=my_encrypted_file
 ```
 
 ## Usage

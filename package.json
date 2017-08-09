@@ -43,6 +43,7 @@
     "colors": "^1.1.2",
     "columnify": "^1.5.4",
     "csv": "^1.1.1",
+    "es6-promisify": "^5.0.0",
     "minimist": "^1.2.0",
     "moment": "^2.17.1",
     "uuid": "^3.1.0"

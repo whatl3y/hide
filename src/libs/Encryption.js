@@ -1,12 +1,12 @@
 import crypto from 'crypto'
 import fs from 'fs'
-import util from 'util'
 import zlib from 'zlib'
 import bcrypt from 'bcrypt'
+import promisify from 'es6-promisify'
 import config from '../config'
 
-const inflate = util.promisify(zlib.inflate)
-const deflate = util.promisify(zlib.deflate)
+const inflate = promisify(zlib.inflate)
+const deflate = promisify(zlib.deflate)
 
 export default function Encryption(options={}) {
   return {

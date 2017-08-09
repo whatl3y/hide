@@ -1,12 +1,13 @@
 import util from 'util'
 import fs from 'fs'
 import path from 'path'
+import promisify from 'es6-promisify'
 import Encryption from './Encryption'
 import config from '../config'
 
-const mkdirPromise = util.promisify(fs.mkdir)
-const writeFilePromise = util.promisify(fs.writeFile)
-const readFilePromise = util.promisify(fs.readFile)
+const mkdirPromise = promisify(fs.mkdir)
+const writeFilePromise = promisify(fs.writeFile)
+const readFilePromise = promisify(fs.readFile)
 
 const encryption = Encryption()
 
