@@ -41,10 +41,10 @@ secret that's used with AES-256 to secure the data stored on your machine.
 
 #### Parameters
 
-1. -n / --name (REQUIRED): The name of the account you're storing. It can be any alphanumeric characters.
-2. -u / --username (optional): The username for the account.
-3. -p / --password (optional): The password for the account.
-4. -e / --extra (optional): Any additional information you'd like to provide about the account.
+- -n / --name (REQUIRED): The name of the account you're storing. It can be any alphanumeric characters.
+- -u / --username (optional): The username for the account.
+- -p / --password (optional): The password for the account.
+- -e / --extra (optional): Any additional information you'd like to provide about the account.
 
 ```
 
@@ -57,7 +57,7 @@ Successfully added account 'my_new_account'!
 ### Delete an account
 
 #### PARAMETERS
-1. -i / --uuid: The unique identifier of the account you want to review.
+- -i / --uuid: The unique identifier of the account you want to review.
 
 ```
 
@@ -71,13 +71,13 @@ Successfully deleted account with uuid: 'f62d5a21-4119-4a05-bced-0dca8f310d4b'
 
 #### Parameters
 Either uuid or name are at least required:
-1. -i / --uuid: The unique identifier of the account you want to review.
-2. -n / --name: The name of the account you're storing. It can be any alphanumeric characters.
+- -i / --uuid: The unique identifier of the account you want to review.
+- -n / --name: The name of the account you're storing. It can be any alphanumeric characters.
 
 Optional
-3. -u / --username (optional): The username for the account.
-4. -p / --password (optional): The password for the account.
-5. -e / --extra (optional): Any additional information you'd like to provide about the account.
+- -u / --username (optional): The username for the account.
+- -p / --password (optional): The password for the account.
+- -e / --extra (optional): Any additional information you'd like to provide about the account.
 
 ```
 
@@ -91,7 +91,7 @@ Successfully updated account with name: 'facebook.com'!
 
 #### Parameters
 
-1. -s / --search (optional): An optional term to look for accounts based on
+- -s / --search (optional): An optional term to look for accounts based on
 a case-insensitive search against the NAME or USERNAME.
 NOTE: the `search` command never shows the password for the account. Use `show` to retrieve the password.
 
@@ -118,11 +118,11 @@ facebook.com        userna                           def7f984-c2d7-4069-907c-fac
 
 #### Parameters
 Either uuid or name are at least required:
-1. -i / --uuid: The unique identifier of the account you want to review.
-2. -n / --name: The name of the account you're reviewing.
+- -i / --uuid: The unique identifier of the account you want to review.
+- -n / --name: The name of the account you're reviewing.
 
 Optional
-3. -p / --password (optional): Whether to show the password. DEFAULT: false
+- -p / --password (optional): Whether to show the password. DEFAULT: false
 
 ```
 
@@ -149,7 +149,7 @@ password: the password of the account
 extra: any desired extra information you want to provide
 
 #### Parameters
-1. -f / --filepath: The full filepath of the CSV that we're importing data from.
+- -f / --filepath: The full filepath of the CSV that we're importing data from.
 
 ```
 

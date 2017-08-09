@@ -107,8 +107,7 @@ if (!config.cryptography.password) {
           let rows = await Import.csv(importFilePath)
           const numAccounts = rows.length
           while (rows.length > 0) {
-            const row = rows[0]
-            rows.shift()
+            const row = rows.shift()
             if (row.name)
               await AccountMgmt.addAccount(row.name, row.username, row.password, row.extra)
           }
