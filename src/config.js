@@ -1,5 +1,4 @@
 import path from 'path'
-import appRootPath from 'app-root-path'
 
 export default {
   filepath: process.env.NODE_HIDE_FILEPATH || getHomeDirectory(),

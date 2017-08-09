@@ -36,7 +36,6 @@
     "webpack-stream": "^4.0.0"
   },
   "dependencies": {
-    "app-root-path": "^2.0.1",
     "babel-polyfill": "^6.23.0",
     "bunyan": "^1.8.10",
     "colors": "^1.1.2",
