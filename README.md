@@ -69,39 +69,6 @@ Successfully added account 'my_new_account'!
 
 ```
 
-### Delete an account
-
-#### PARAMETERS
-- -i / --uuid: The unique identifier of the account you want to review.
-
-```
-
->hide delete -i f62d5a21-4119-4a05-bced-0dca8f310d4b
-
-Successfully deleted account with uuid: 'f62d5a21-4119-4a05-bced-0dca8f310d4b'
-
-```
-
-### Update an account
-
-#### Parameters
-Either uuid or name are at least required:
-- -i / --uuid: The unique identifier of the account you want to review.
-- -n / --name: The name of the account you're storing. It can be any alphanumeric characters.
-
-Optional
-- -u / --username (optional): The username for the account.
-- -p / --password (optional): The password for the account.
-- -e / --extra (optional): Any additional information you'd like to provide about the account.
-
-```
-
->hide update -n facebook.com -u fbuser -p my_password1
-
-Successfully updated account with name: 'facebook.com'!
-
-```
-
 ### Search your accounts
 
 #### Parameters
@@ -151,6 +118,53 @@ facebook.com    fbuser                          f62d5a21-4119-4a05-bced-0dca8f31
 
 NAME            USERNAME        PASSWORD        EXTRA           UUID                                
 facebook.com    fbuser          my_password1                    f62d5a21-4119-4a05-bced-0dca8f310d4b
+
+```
+
+### Update an account
+
+#### Parameters
+Either uuid or name are at least required:
+- -i / --uuid: The unique identifier of the account you want to review.
+- -n / --name: The name of the account you're storing. It can be any alphanumeric characters.
+
+Optional
+- -u / --username (optional): The username for the account.
+- -p / --password (optional): The password for the account.
+- -e / --extra (optional): Any additional information you'd like to provide about the account.
+
+```
+
+>hide update -n facebook.com -u fbuser -p my_password1
+
+Successfully updated account with name: 'facebook.com'!
+
+```
+
+### Delete an account
+
+#### PARAMETERS
+- -i / --uuid: The unique identifier of the account you want to review.
+
+```
+
+>hide delete -i f62d5a21-4119-4a05-bced-0dca8f310d4b
+
+Successfully deleted account with uuid: 'f62d5a21-4119-4a05-bced-0dca8f310d4b'
+
+```
+
+### Get the full file path of the encrypted flat file
+
+Returns the file location on your machine where the
+encrypted file lives.
+
+```
+
+>hide file
+
+Your encrypted file is in the following location:
+/Users/yourname/__node-hide-accounts
 
 ```
 

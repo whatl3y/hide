@@ -1,4 +1,5 @@
 const gulp = require('gulp')
+var gulpSequence = require('gulp-sequence')
 const babel = require('gulp-babel')
 const plumber = require('gulp-plumber')
 const insert = require('gulp-insert')
@@ -24,4 +25,4 @@ gulp.task('index', function() {
     .pipe(gulp.dest("./dist"))
 })
 
-gulp.task('build', ['transpile', 'index'])
+gulp.task('build', gulpSequence('transpile', 'index'))

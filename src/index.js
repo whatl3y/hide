@@ -1,4 +1,5 @@
 import minimist from 'minimist'
+import path from 'path'
 import AccountMgmt from './libs/AccountMgmt'
 import FileHandler from './libs/FileHandler'
 import Import from './libs/Import'
@@ -39,9 +40,9 @@ if (!config.cryptography.password) {
 
         const result = await AccountMgmt.deleteAccountByUuid(uid)
         if (result)
-          Vomit.success(`Successfully deleted account with uuid: '${uid}'`)
-        else
-          Vomit.error(`We didn't find an account with uuid: '${uid}'`)
+          return Vomit.success(`Successfully deleted account with uuid: '${uid}'`)
+
+        Vomit.error(`We didn't find an account with uuid: '${uid}'`)
 
         break
 
@@ -57,24 +58,20 @@ if (!config.cryptography.password) {
           if (account) {
             if (!password)
               delete(account.password)
-            Vomit.listSingleAccount(account)
-
-          } else {
-            Vomit.error(`We didn't find an account with uuid: ${uid}`)
+            return Vomit.listSingleAccount(account)
           }
+          return Vomit.error(`We didn't find an account with uuid: ${uid}`)
+
         } else if (name) {
           const account = await AccountMgmt.findAccountByName(name)
           if (account) {
             if (!password)
               delete(account.password)
-            Vomit.listSingleAccount(account)
-
-          } else {
-            Vomit.error(`We didn't find an account with name: ${name}`)
+            return Vomit.listSingleAccount(account)
           }
-        } else {
-          Vomit.error('Either a name (-n or --name) or uuid (-u or --uuid) parameter is a required at a minimum to show the details for an account.')
+          return Vomit.error(`We didn't find an account with name: ${name}`)
         }
+        Vomit.error('Either a name (-n or --name) or uuid (-u or --uuid) parameter is a required at a minimum to show the details for an account.')
 
         break
 
@@ -83,27 +80,30 @@ if (!config.cryptography.password) {
           const account = await AccountMgmt.findAccountByUuid(uid)
           if (account) {
             await AccountMgmt.updateAccount(uid, {name: name, username: username, password: password, extra: extra}, account)
-            Vomit.success(`Successfully updated account with uuid: '${uid}'!`)
-          } else {
-            Vomit.error(`We didn't find an account with uuid: ${uid}`)
+            return Vomit.success(`Successfully updated account with uuid: '${uid}'!`)
           }
+          return Vomit.error(`We didn't find an account with uuid: ${uid}`)
+
         } else if (name) {
           const account = await AccountMgmt.findAccountByName(name)
           if (account) {
             await AccountMgmt.updateAccount(account.uuid, {name: name, username: username, password: password, extra: extra}, account)
-            Vomit.success(`Successfully updated account with name: '${name}'!`)
-          } else {
-            Vomit.error(`We didn't find an account with name: ${name}`)
+            return Vomit.success(`Successfully updated account with name: '${name}'!`)
           }
-        } else {
-          Vomit.error('Either a name (-n or --name) or uuid (-u or --uuid) parameter is a required at a minimum to show the details for an account.')
+          return Vomit.error(`We didn't find an account with name: ${name}`)
         }
+        Vomit.error('Either a name (-n or --name) or uuid (-u or --uuid) parameter is a required at a minimum to show the details for an account.')
 
+        break
+
+      case 'file':
+        const fullPath = path.join(config.filepath, config.filename)
+        Vomit.twoLinesBlueThenGreen(`Your encrypted file is in the following location:`, fullPath)
         break
 
       case 'import':
         const importFilePath = argv.f || argv.filepath
-        if (FileHandler.doesFileExist(importFilePath)) {
+        if (importFilePath && FileHandler.doesFileExist(importFilePath)) {
           let rows = await Import.csv(importFilePath)
           const numAccounts = rows.length
           while (rows.length > 0) {
@@ -111,11 +111,9 @@ if (!config.cryptography.password) {
             if (row.name)
               await AccountMgmt.addAccount(row.name, row.username, row.password, row.extra)
           }
-          Vomit.success(`Successfully added ${numAccounts} accounts from CSV: ${importFilePath}!`)
-
-        } else {
-          Vomit.error(`We can't find filepath provided: ${importFilePath}`)
+          return Vomit.success(`Successfully added ${numAccounts} accounts from CSV: ${importFilePath}!`)
         }
+        Vomit.error(`We can't find filepath provided: ${importFilePath || 'NO FILE PROVIDED'}`)
 
         break
 

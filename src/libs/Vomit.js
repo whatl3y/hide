@@ -31,6 +31,13 @@ export default {
     })
   },
 
+  twoLinesBlueThenGreen(str1, str2) {
+    this.wrapInNewlines(() => {
+      console.log(str1.blue)
+      console.log(str2.green)
+    })
+  },
+
   success(string) {
     this.wrapInNewlines(() => console.log(string.green))
   },
