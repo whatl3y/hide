@@ -26,17 +26,17 @@ if (!config.cryptography.password) {
 
     switch (command) {
       case 'add':
-        if (!name)
+        if (!(name || second))
           return Vomit.error('An account name (-n or --name) parameter is a required at a minimum to add a new account.')
 
-        await AccountMgmt.addAccount(name, username, password, extra)
+        await AccountMgmt.addAccount(name || second, username, password, extra)
         Vomit.success(`Successfully added account '${name}'!`)
 
         break
 
       case 'delete':
         if (!uid)
-          return Vomit.error('A uuid (-u or --uuid) is a required to delete an account.')
+          return Vomit.error('A uuid (-i or --id or --uuid) is a required to delete an account.')
 
         const result = await AccountMgmt.deleteAccountByUuid(uid)
         if (result)
@@ -72,7 +72,7 @@ if (!config.cryptography.password) {
           }
           return Vomit.error(`We didn't find an account with name: ${nameStringToTry}`)
         }
-        Vomit.error('Either a name (-n or --name) or uuid (-u or --uuid) parameter is a required at a minimum to show the details for an account.')
+        Vomit.error('Either a name (-n or --name) or uuid (-i or --id or --uuid) parameter is a required at a minimum to show the details for an account.')
 
         break
 
@@ -93,7 +93,7 @@ if (!config.cryptography.password) {
           }
           return Vomit.error(`We didn't find an account with name: ${name}`)
         }
-        Vomit.error('Either a name (-n or --name) or uuid (-u or --uuid) parameter is a required at a minimum to show the details for an account.')
+        Vomit.error('Either a name (-n or --name) or uuid (-i or --id or --uuid) parameter is a required at a minimum to show the details for an account.')
 
         break
 

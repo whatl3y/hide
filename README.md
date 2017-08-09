@@ -174,10 +174,10 @@ Your encrypted file is in the following location:
 
 Note: This requires the CSV have headers that match the following:
 
-name: the account name
-username: the username of the account
-password: the password of the account
-extra: any desired extra information you want to store with the account
+- `name`: the account name
+- `username`: the username of the account
+- `password`: the password of the account
+- `extra`: any desired extra information you want to store with the account
 
 #### PARAMETERS
 - -f / --filepath: The full filepath of the CSV that we're importing data from.
