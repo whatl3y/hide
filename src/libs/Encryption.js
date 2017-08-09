@@ -1,7 +1,6 @@
 import crypto from 'crypto'
 import fs from 'fs'
 import zlib from 'zlib'
-import bcrypt from 'bcrypt'
 import promisify from 'es6-promisify'
 import config from '../config'
 
@@ -42,14 +41,6 @@ export default function Encryption(options={}) {
         s.on("error", reject)
         s.on("end", () => resolve(md5Sum.digest("hex")))
       })
-    },
-
-    hashPassword(plainPassword, saltRounds=10) {
-      return bcrypt.hash(plainPassword, saltRounds)
-    },
-
-    comparePassword(plainPassword, hashedPassword) {
-      return bcrypt.compare(plainPassword, hashedPassword)
     },
 
     // Handles any gzip/deflating/inflating we might be doing to data

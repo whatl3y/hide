@@ -37,22 +37,6 @@ describe('Encryption', function() {
     })
   })
 
-  describe('#hashPassword() and #comparePassword()', function() {
-    let plainPassword = 'test123'
-    let hashedPassword
-
-    it(`hashPassword should hash a password as expected`, async () => {
-      hashedPassword = await enc.hashPassword(plainPassword)
-      assert.equal(true, plainPassword != hashedPassword)
-      assert.equal(true, hashedPassword.length > 0)
-    })
-
-    it(`comparePassword should compare hash with plain password correctly`, async () => {
-      const matches = await enc.comparePassword(plainPassword, hashedPassword)
-      assert.equal(true, matches)
-    })
-  })
-
   describe(`#parseData()`, () => {
     const key = 'test_compress_1'
 

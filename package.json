@@ -38,7 +38,6 @@
   "dependencies": {
     "app-root-path": "^2.0.1",
     "babel-polyfill": "^6.23.0",
-    "bcrypt": "^1.0.2",
     "bunyan": "^1.8.10",
     "colors": "^1.1.2",
     "columnify": "^1.5.4",
