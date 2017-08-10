@@ -1,21 +1,17 @@
 const gulp = require('gulp')
-var gulpSequence = require('gulp-sequence')
+const gulpSequence = require('gulp-sequence')
 const babel = require('gulp-babel')
 const plumber = require('gulp-plumber')
 const insert = require('gulp-insert')
-// const replace = require('gulp-replace')
-// const sourcemaps = require('gulp-sourcemaps')
 const uglify = require('gulp-uglify')
 const webpack = require('webpack-stream')
 const webpack_config = require('./webpack.config.js')
 
 gulp.task('transpile', function() {
   return gulp.src("./src/**/*.js")
-    // .pipe(sourcemaps.init())
     .pipe(plumber())
     .pipe(webpack(webpack_config))
     .pipe(uglify().on('error', console.log))
-    // .pipe(sourcemaps.write('./maps'))
     .pipe(gulp.dest("./dist"))
 })
 

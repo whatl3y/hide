@@ -31,11 +31,15 @@ export default {
     })
   },
 
-  twoLinesBlueThenGreen(str1, str2) {
+  twoLinesDifferentColors(str1, str2, color1='blue', color2='green') {
     this.wrapInNewlines(() => {
-      console.log(str1.blue)
-      console.log(str2.green)
+      if (str1.length > 0) console.log(str1[color1])
+      if (str2.length > 0) console.log(str2[color2])
     })
+  },
+
+  singleLine(str, color='blue', numWrappedRows=1) {
+    this.wrapInNewlines(() => console.log(str[color]), numWrappedRows)
   },
 
   success(string) {
@@ -47,7 +51,7 @@ export default {
   },
 
   wrapInNewlines(functionToWriteMoreOutput=NOOP, howMany=1) {
-    const newlineString = new Array(howMany-1).fill('\n').join('')
+    const newlineString = (howMany-1 > 0) ? new Array(howMany-1).fill('\n').join('') : ''
     if (howMany > 0) console.log(newlineString)
     functionToWriteMoreOutput()
     if (howMany > 0) console.log(newlineString)

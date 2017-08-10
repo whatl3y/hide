@@ -1,5 +1,3 @@
-import path from 'path'
-
 export default {
   filepath: process.env.NODE_HIDE_FILEPATH || getHomeDirectory(),
   filename: process.env.NODE_HIDE_FILENAME || '__node-hide-accounts',

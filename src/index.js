@@ -99,20 +99,29 @@ if (!config.cryptography.password) {
 
       case 'file':
         const fullPath = path.join(config.filepath, config.filename)
-        Vomit.twoLinesBlueThenGreen(`Your encrypted file is in the following location:`, fullPath)
+        Vomit.twoLinesDifferentColors(`Your encrypted file is in the following location:`, fullPath, 'blue', 'green')
         break
 
       case 'import':
         const importFilePath = argv.f || argv.filepath || second
         if (importFilePath && FileHandler.doesFileExist(importFilePath)) {
           let rows = await Import.csv(importFilePath)
-          const numAccounts = rows.length
+          let numAccountsImported = 0
+          let numAccountsNotImported = 0
+          const totalRows = rows.length
           while (rows.length > 0) {
             const row = rows.shift()
-            if (row.name)
+            if (row.name) {
+              numAccountsImported++
               await AccountMgmt.addAccount(row.name, row.username, row.password, row.extra)
+            } else {
+              numAccountsNotImported++
+            }
           }
-          return Vomit.success(`Successfully added ${numAccounts} accounts from CSV: ${importFilePath}!`)
+          const str1 = `Successfully added ${numAccountsImported} accounts from CSV: ${importFilePath}!`
+          const str2 = (numAccountsNotImported > 0) ? `Did not add ${numAccountsNotImported} accounts because we didn't see an account name ('name' CSV header).` : ''
+          Vomit.twoLinesDifferentColors(str1, str2, 'green', 'red')
+          return Vomit.singleLine(`Total number of rows in spreadsheet: ${totalRows}\n`, 'blue', 0)
         }
         Vomit.error(`We can't find filepath provided: ${importFilePath || 'NO FILE PROVIDED'}`)
 
