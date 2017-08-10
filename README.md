@@ -1,6 +1,6 @@
 # hide
 
-CLI utility to store and retrieve account information securely on your machine.
+CLI utility to store and retrieve your personal account(s) information securely on your computer.
 
 ## Description
 
@@ -29,7 +29,7 @@ bit encryption with a password I set.
 #### CRYPT_SECRET (required)
 The following should be set to control the global secret that's used with AES-256 to secure the data stored on your machine.
 
-!!!DON'T LOSE/FORGET THIS!!!
+**DON'T LOSE/FORGET THIS**
 
 ```
 >export CRYPT_SECRET=[your all time master secret value]

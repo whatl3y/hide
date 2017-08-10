@@ -6,7 +6,6 @@ import Import from './libs/Import'
 import Vomit from './libs/Vomit'
 import config from './config'
 
-// Ex. >node dist/index search -s my_search_string
 const argv = minimist(process.argv.slice(2))
 const [ command, second, third ] = argv._
 
@@ -26,11 +25,12 @@ if (!config.cryptography.password) {
 
     switch (command) {
       case 'add':
-        if (!(name || second))
+        const accountName = name || second
+        if (!accountName)
           return Vomit.error('An account name (-n or --name) parameter is a required at a minimum to add a new account.')
 
-        await AccountMgmt.addAccount(name || second, username, password, extra)
-        Vomit.success(`Successfully added account '${name}'!`)
+        await AccountMgmt.addAccount(accountName, username, password, extra)
+        Vomit.success(`Successfully added account '${accountName}'!`)
 
         break
 
