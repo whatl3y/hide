@@ -190,6 +190,34 @@ Successfully added 123 accounts from CSV: /Users/yourname/myfile.csv!
 
 ```
 
+### Encrypt text or a file
+
+#### PARAMETERS
+- -t / --text: Text you want to encrypt.
+- -t / --file: A local file path containing data you want to encrypt.
+
+```
+
+>hide encrypt -t testing123
+
+0f318802819cb67ea05c
+
+```
+
+### Decrypt text or a file
+
+#### PARAMETERS
+- -t / --text: Text you want to decrypt.
+- -t / --file: A local file path containing data you want to decrypt.
+
+```
+
+>hide decrypt -t 0f318802819cb67ea05c
+
+testing123
+
+```
+
 ## Development
 
 If you want to clone and add/update functionality, you can build

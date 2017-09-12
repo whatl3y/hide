@@ -4,6 +4,7 @@ import zlib from 'zlib'
 import promisify from 'es6-promisify'
 import config from '../config'
 
+const readFile = promisify(fs.readFile)
 const inflate = promisify(zlib.inflate)
 const deflate = promisify(zlib.deflate)
 
@@ -19,11 +20,22 @@ export default function Encryption(options={}) {
       return crypted
     },
 
+    async encryptFileUtf8(filePath) {
+      console.log('filePath', filePath)
+      const fileText = await readFile(filePath, { encoding: 'utf8' })
+      return this.encrypt(fileText)
+    },
+
     decrypt(text) {
       const decipher = crypto.createDecipher(this._algorithm, this._secret)
       let dec = decipher.update(text, 'hex', 'utf8')
       dec += decipher.final('utf8')
       return dec
+    },
+
+    async decryptFileUtf8(filePath) {
+      const fileText = await readFile(filePath, { encoding: 'utf8' })
+      return this.decrypt(fileText)
     },
 
     stringToHash(string) {

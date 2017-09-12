@@ -1,6 +1,7 @@
 import minimist from 'minimist'
 import path from 'path'
 import AccountMgmt from './libs/AccountMgmt'
+import Encryption from './libs/Encryption'
 import FileHandler from './libs/FileHandler'
 import Import from './libs/Import'
 import Vomit from './libs/Vomit'
@@ -22,6 +23,12 @@ if (!config.cryptography.password) {
     const password  = argv.p || argv.password
     const uid       = argv.i || argv.id || argv.uuid
     const username  = argv.u || argv.username
+
+    // encryption/decryption methods
+    const text      = argv.t || argv.text
+    const file      = argv.f || argv.file
+
+    const encryption = Encryption()
 
     switch (command) {
       case 'add':
@@ -125,6 +132,32 @@ if (!config.cryptography.password) {
         }
         Vomit.error(`We can't find filepath provided: ${importFilePath || 'NO FILE PROVIDED'}`)
 
+        break
+
+      case 'encrypt':
+        let cipherText
+        if (text) {
+          cipherText = encryption.encrypt(text)
+          Vomit.success(cipherText)
+        } else if (file) {
+          cipherText = await encryption.encryptFileUtf8(file)
+          Vomit.success(cipherText)
+        } else {
+          Vomit.error(`Please enter text (-t or --text) or a file path (-f or --file) to encrypt text.`)
+        }
+        break
+
+      case 'decrypt':
+        let plainText
+        if (text) {
+          plainText = encryption.decrypt(text)
+          Vomit.success(plainText)
+        } else if (file) {
+          plainText = await encryption.decryptFileUtf8(file)
+          Vomit.success(plainText)
+        } else {
+          Vomit.error(`Please enter text (-t or --text) or a file path (-f or --file) to encrypt text.`)
+        }
         break
 
       default:
