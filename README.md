@@ -194,11 +194,12 @@ Successfully added 123 accounts from CSV: /Users/yourname/myfile.csv!
 
 #### PARAMETERS
 - -t / --text: Text you want to encrypt.
-- -t / --file: A local file path containing data you want to encrypt.
+- -f / --file: A local file path containing data you want to encrypt.
 
 ```
 
 >hide encrypt -t testing123
+>hide encrypt testing123
 
 0f318802819cb67ea05c
 
@@ -208,11 +209,12 @@ Successfully added 123 accounts from CSV: /Users/yourname/myfile.csv!
 
 #### PARAMETERS
 - -t / --text: Text you want to decrypt.
-- -t / --file: A local file path containing data you want to decrypt.
+- -f / --file: A local file path containing data you want to decrypt.
 
 ```
 
 >hide decrypt -t 0f318802819cb67ea05c
+>hide decrypt 0f318802819cb67ea05c
 
 testing123
 

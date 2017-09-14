@@ -135,9 +135,10 @@ if (!config.cryptography.password) {
         break
 
       case 'encrypt':
+        const plain = text || second
         let cipherText
-        if (text) {
-          cipherText = encryption.encrypt(text)
+        if (plain) {
+          cipherText = encryption.encrypt(plain)
           Vomit.success(cipherText)
         } else if (file) {
           cipherText = await encryption.encryptFileUtf8(file)
@@ -148,9 +149,10 @@ if (!config.cryptography.password) {
         break
 
       case 'decrypt':
+        const cipher = text || second
         let plainText
-        if (text) {
-          plainText = encryption.decrypt(text)
+        if (cipher) {
+          plainText = encryption.decrypt(cipher)
           Vomit.success(plainText)
         } else if (file) {
           plainText = await encryption.decryptFileUtf8(file)
@@ -167,10 +169,14 @@ if (!config.cryptography.password) {
     process.exit()
 
   } catch(err) {
-    if (typeof err === 'string')
+    if (typeof err === 'string') {
       Vomit.error(err)
-    else
-      console.error(err)
+    } else if (err.toString() == 'TypeError: Bad input string') {
+      Vomit.error(`Uh oh, The error we got is '${err.toString()}'\n\nThis usually means the CRYPT_SECRET is different for the info you're trying to decrypt than was used to encrypt it. Full stack trace below.`)
+      console.log(err)
+    } else {
+      console.log(err)
+    }
     process.exit()
   }
 })()
