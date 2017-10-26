@@ -54,8 +54,15 @@ if (!config.cryptography.password) {
         break
 
       case 'search':
-        const searchString = argv.s || argv.search || second
-        const info = await AccountMgmt.searchForAccountsByName(searchString)
+        const searchString      = argv.s || argv.search || second
+        const allAccounts       = await FileHandler.getAndDecryptFlatFile()
+        const nameMatchInfo     = await AccountMgmt.searchForAccountsByName(searchString, allAccounts)
+        const usernameMatchInfo = await AccountMgmt.searchForAccountsByUsername(searchString, allAccounts)
+
+        const info = {
+          matches:  [].concat(nameMatchInfo.matches).concat(usernameMatchInfo.matches).sort(AccountMgmt.sortByName),
+          total:    nameMatchInfo.total + usernameMatchInfo.total
+        }
         Vomit.listAccounts(info.matches, info.total)
         break
 

@@ -61,8 +61,16 @@ export default {
     return Object.assign(currentAccounts[matchingUuid], {uuid: matchingUuid})
   },
 
-  async searchForAccountsByName(searchString=null) {
-    const currentAccounts = await FileHandler.getAndDecryptFlatFile()
+  async searchForAccountsByName(searchString=null, currentAccounts=null) {
+    return await this.searchForAccountsByField('name', searchString, currentAccounts)
+  },
+
+  async searchForAccountsByUsername(searchString, currentAccounts=null) {
+    return await this.searchForAccountsByField('username', searchString, currentAccounts)
+  },
+
+  async searchForAccountsByField(field, searchString=null, currentAccounts=null) {
+    currentAccounts = currentAccounts || (await FileHandler.getAndDecryptFlatFile())
     if (!currentAccounts) {
       return {
         matches: [],
@@ -77,10 +85,9 @@ export default {
       if (!account)
         return null
       if (searchString) {
-        const searchRegexp = new RegExp(searchString, 'i')
-        const nameMatches = account.name && searchRegexp.test(account.name)
-        const usernameMatches = account.username && searchRegexp.test(account.username)
-        if (nameMatches || usernameMatches)
+        const searchRegexp  = new RegExp(searchString, 'i')
+        const fieldMatches  = account[field] && searchRegexp.test(account[field])
+        if (fieldMatches)
           return Object.assign(account, {uuid: uuid})
         return null
       }
@@ -93,7 +100,7 @@ export default {
     }
   },
 
-  searchForAccountsByUsername(searchString) {
-
+  sortByName(acc1, acc2) {
+    return (acc1.name.toLowerCase() < acc2.name.toLowerCase()) ? -1 : 1
   }
 }
