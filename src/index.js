@@ -1,11 +1,16 @@
 import minimist from 'minimist'
+import fs from 'fs'
 import path from 'path'
+import promisify from 'es6-promisify'
 import AccountMgmt from './libs/AccountMgmt'
 import Encryption from './libs/Encryption'
 import FileHandler from './libs/FileHandler'
 import Import from './libs/Import'
+import Readline from './libs/Readline'
 import Vomit from './libs/Vomit'
 import config from './config'
+
+const writeFile = promisify(fs.writeFile)
 
 const argv = minimist(process.argv.slice(2))
 const [ command, second, third ] = argv._
@@ -28,7 +33,8 @@ if (!config.cryptography.password) {
     const text      = argv.t || argv.text
     const file      = argv.f || argv.file
 
-    const encryption = Encryption()
+    const encryption  = Encryption()
+    const fullPath    = path.join(config.filepath, config.filename)
 
     switch (command) {
       case 'add':
@@ -61,7 +67,7 @@ if (!config.cryptography.password) {
 
         const info = {
           matches:  [].concat(nameMatchInfo.matches).concat(usernameMatchInfo.matches).sort(AccountMgmt.sortByName),
-          total:    nameMatchInfo.total + usernameMatchInfo.total
+          total:    nameMatchInfo.total
         }
         Vomit.listAccounts(info.matches, info.total)
         break
@@ -112,8 +118,17 @@ if (!config.cryptography.password) {
         break
 
       case 'file':
-        const fullPath = path.join(config.filepath, config.filename)
         Vomit.twoLinesDifferentColors(`Your encrypted file is in the following location:`, fullPath, 'blue', 'green')
+        break
+
+      case 'decryptfile':
+        const answer = await Readline().ask('Are you sure you want to decrypt your file and save it to disk (yes/no): ')
+        if (answer.toLowerCase() === 'yes') {
+          const decryptedFullPath = `${fullPath}.json`
+          const fileData          = await FileHandler.getAndDecryptFlatFile()
+          await writeFile(decryptedFullPath, JSON.stringify(fileData))
+          Vomit.success(`Successfully saved your decrypted account data to:\n${decryptedFullPath}`)
+        }
         break
 
       case 'import':

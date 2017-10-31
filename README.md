@@ -21,7 +21,7 @@ bit encryption with a password I set.
 ## Install
 
 ```
->npm install -g hide
+$ npm install -g hide
 ```
 
 ## Config
@@ -32,21 +32,21 @@ The following should be set to control the global secret that's used with AES-25
 **DON'T LOSE/FORGET THIS**
 
 ```
->export CRYPT_SECRET=[your all time master secret value]
+$ export CRYPT_SECRET=[your all time master secret value]
 ```
 
 #### NODE_HIDE_FILEPATH
 Directory where the encrypted file will live -- default: home directory (either process.env.HOME on unix/linux/mac or process.env.USERPROFILE on windows)
 
 ```
->export NODE_HIDE_FILEPATH=~
+$ export NODE_HIDE_FILEPATH=~
 ```
 
 #### NODE_HIDE_FILENAME
 Name of flat file that holds the encrypted data of your accounts -- default: '\_\_node-hide-accounts'
 
 ```
->export NODE_HIDE_FILENAME=my_encrypted_file
+$ export NODE_HIDE_FILENAME=my_encrypted_file
 ```
 
 ## Usage
@@ -62,7 +62,7 @@ Name of flat file that holds the encrypted data of your accounts -- default: '\_
 
 ```
 
->hide add -n my_new_account -u myname -p the_secret_password -e "Some extra stuff!!!!"
+$ hide add -n my_new_account -u myname -p the_secret_password -e "Some extra stuff!!!!"
 
 Successfully added account 'my_new_account'!
 
@@ -78,7 +78,7 @@ NOTE: the `search` command never shows the password for the account. Use `show` 
 
 ```
 
->hide search
+$ hide search
 
 I found the following accounts:
 NAME                USERNAME        EXTRA            UUID                                
@@ -86,7 +86,7 @@ facebook.com        userna                           def7f984-c2d7-4069-907c-fac
 instagram.com       iguser                           def7f984-abc1-1111-2222-facfad597123
 2 of 2 total accounts returned
 
->hide search -s facebook
+$ hide search -s facebook
 
 I found the following accounts:
 NAME                USERNAME        EXTRA            UUID                                
@@ -107,13 +107,13 @@ Optional
 
 ```
 
->hide show -i f62d5a21-4119-4a05-bced-0dca8f310d4b
->hide show -n facebook.com
+$ hide show -i f62d5a21-4119-4a05-bced-0dca8f310d4b
+$ hide show -n facebook.com
 
 NAME            USERNAME        EXTRA           UUID                                
 facebook.com    fbuser                          f62d5a21-4119-4a05-bced-0dca8f310d4b
 
->hide show -n facebook.com -p
+$ hide show -n facebook.com -p
 
 NAME            USERNAME        PASSWORD        EXTRA           UUID                                
 facebook.com    fbuser          my_password1                    f62d5a21-4119-4a05-bced-0dca8f310d4b
@@ -134,7 +134,7 @@ Optional
 
 ```
 
->hide update -n facebook.com -u fbuser -p my_password1
+$ hide update -n facebook.com -u fbuser -p my_password1
 
 Successfully updated account with name: 'facebook.com'!
 
@@ -147,7 +147,7 @@ Successfully updated account with name: 'facebook.com'!
 
 ```
 
->hide delete -i f62d5a21-4119-4a05-bced-0dca8f310d4b
+$ hide delete -i f62d5a21-4119-4a05-bced-0dca8f310d4b
 
 Successfully deleted account with uuid: 'f62d5a21-4119-4a05-bced-0dca8f310d4b'
 
@@ -163,11 +163,26 @@ None
 
 ```
 
->hide file
+$ hide file
 
 Your encrypted file is in the following location:
 /Users/yourname/__node-hide-accounts
 
+```
+
+### Decrypt file and store on disk
+
+Decrypts
+
+#### PARAMETERS
+None
+
+```
+$ hide decryptfile
+Are you sure you want to decrypt your file and save it to disk (yes/no): yes
+
+Successfully saved your decrypted account data to:
+/Users/yourname/__node-hide-accounts.json
 ```
 
 ### Import from a CSV
@@ -184,7 +199,7 @@ Note: This requires the CSV have headers that match the following:
 
 ```
 
->hide import -f /Users/yourname/myfile.csv
+$ hide import -f /Users/yourname/myfile.csv
 
 Successfully added 123 accounts from CSV: /Users/yourname/myfile.csv!
 
@@ -198,8 +213,8 @@ Successfully added 123 accounts from CSV: /Users/yourname/myfile.csv!
 
 ```
 
->hide encrypt -t testing123
->hide encrypt testing123
+$ hide encrypt -t testing123
+$ hide encrypt testing123
 
 0f318802819cb67ea05c
 
@@ -213,8 +228,8 @@ Successfully added 123 accounts from CSV: /Users/yourname/myfile.csv!
 
 ```
 
->hide decrypt -t 0f318802819cb67ea05c
->hide decrypt 0f318802819cb67ea05c
+$ hide decrypt -t 0f318802819cb67ea05c
+$ hide decrypt 0f318802819cb67ea05c
 
 testing123
 
@@ -228,11 +243,11 @@ using the following.
 ### Build
 
 ```
->npm run build
+$ npm run build
 ```
 
 ### Tests
 
 ```
->npm test
+$ npm test
 ```
