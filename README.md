@@ -172,7 +172,9 @@ Your encrypted file is in the following location:
 
 ### Decrypt file and store on disk
 
-Decrypts
+Decrypts the encrypted file that is used by hide to store your account
+information, and stores it on disk in the same location as your file
+with an appended '.json' to the file name.
 
 #### PARAMETERS
 None
