@@ -64,9 +64,13 @@ if (!config.cryptography.password) {
         const allAccounts       = await FileHandler.getAndDecryptFlatFile()
         const nameMatchInfo     = await AccountMgmt.searchForAccountsByName(searchString, allAccounts)
         const usernameMatchInfo = await AccountMgmt.searchForAccountsByUsername(searchString, allAccounts)
+        const allMatches        = [].concat(nameMatchInfo.matches).concat(usernameMatchInfo.matches).sort(AccountMgmt.sortByName).reduce((acc, val) => {
+          if (acc.indexOf(val) === -1) acc.push(val)
+          return acc
+        }, [])
 
         const info = {
-          matches:  [].concat(nameMatchInfo.matches).concat(usernameMatchInfo.matches).sort(AccountMgmt.sortByName),
+          matches:  allMatches,
           total:    nameMatchInfo.total
         }
         Vomit.listAccounts(info.matches, info.total)

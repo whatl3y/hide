@@ -61,11 +61,9 @@ $ export NODE_HIDE_FILENAME=my_encrypted_file
 - -e / --extra (optional): Any additional information you'd like to provide about the account.
 
 ```
-
 $ hide add -n my_new_account -u myname -p the_secret_password -e "Some extra stuff!!!!"
 
 Successfully added account 'my_new_account'!
-
 ```
 
 ### Search your accounts
@@ -77,7 +75,6 @@ a case-insensitive search against the NAME or USERNAME.
 NOTE: the `search` command never shows the password for the account. Use `show` to retrieve the password.
 
 ```
-
 $ hide search
 
 I found the following accounts:
@@ -92,7 +89,6 @@ I found the following accounts:
 NAME                USERNAME        EXTRA            UUID                                
 facebook.com        userna                           def7f984-c2d7-4069-907c-facfad597123
 1 of 2 total accounts returned
-
 ```
 
 ### Show a single account
@@ -106,7 +102,6 @@ Optional
 - -p / --password (optional): Whether to show the password. DEFAULT: false
 
 ```
-
 $ hide show -i f62d5a21-4119-4a05-bced-0dca8f310d4b
 $ hide show -n facebook.com
 
@@ -117,7 +112,6 @@ $ hide show -n facebook.com -p
 
 NAME            USERNAME        PASSWORD        EXTRA           UUID                                
 facebook.com    fbuser          my_password1                    f62d5a21-4119-4a05-bced-0dca8f310d4b
-
 ```
 
 ### Update an account
@@ -133,11 +127,9 @@ Optional
 - -e / --extra (optional): Any additional information you'd like to provide about the account.
 
 ```
-
 $ hide update -n facebook.com -u fbuser -p my_password1
 
 Successfully updated account with name: 'facebook.com'!
-
 ```
 
 ### Delete an account
@@ -146,11 +138,9 @@ Successfully updated account with name: 'facebook.com'!
 - -i / --uuid: The unique identifier of the account you want to delete.
 
 ```
-
 $ hide delete -i f62d5a21-4119-4a05-bced-0dca8f310d4b
 
 Successfully deleted account with uuid: 'f62d5a21-4119-4a05-bced-0dca8f310d4b'
-
 ```
 
 ### Get the full file path of the encrypted flat file
@@ -162,12 +152,10 @@ encrypted file lives.
 None
 
 ```
-
 $ hide file
 
 Your encrypted file is in the following location:
 /Users/yourname/__node-hide-accounts
-
 ```
 
 ### Decrypt file and store on disk
@@ -200,11 +188,9 @@ Note: This requires the CSV have headers that match the following:
 - -f / --filepath: The full filepath of the CSV that we're importing data from.
 
 ```
-
 $ hide import -f /Users/yourname/myfile.csv
 
 Successfully added 123 accounts from CSV: /Users/yourname/myfile.csv!
-
 ```
 
 ### Encrypt text or a file
@@ -214,12 +200,10 @@ Successfully added 123 accounts from CSV: /Users/yourname/myfile.csv!
 - -f / --file: A local file path containing data you want to encrypt.
 
 ```
-
 $ hide encrypt -t testing123
 $ hide encrypt testing123
 
 0f318802819cb67ea05c
-
 ```
 
 ### Decrypt text or a file
@@ -229,12 +213,10 @@ $ hide encrypt testing123
 - -f / --file: A local file path containing data you want to decrypt.
 
 ```
-
 $ hide decrypt -t 0f318802819cb67ea05c
 $ hide decrypt 0f318802819cb67ea05c
 
 testing123
-
 ```
 
 ## Development
