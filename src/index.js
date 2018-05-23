@@ -135,6 +135,16 @@ if (!config.cryptography.password) {
         }
         break
 
+      case 'recrypt':
+        const dest            = path.join(config.filepath, config.filename)
+        const encryption2     = Encryption({ secret: second })
+        const currentFileData = await FileHandler.getAndDecryptFlatFile()
+        const encryptedString = encryption2.encrypt(JSON.stringify(currentFileData))
+        const deflatedString  = await encryption2.parseData(encryptedString)
+        await writeFile(dest, deflatedString)
+        Vomit.success(`Successfully updated your encrypted file with new secret to: ${dest}`)
+        break
+
       case 'import':
         const importFilePath = argv.f || argv.filepath || second
         if (importFilePath && FileHandler.doesFileExist(importFilePath)) {

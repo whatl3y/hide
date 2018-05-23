@@ -143,6 +143,14 @@ $ hide delete -i f62d5a21-4119-4a05-bced-0dca8f310d4b
 Successfully deleted account with uuid: 'f62d5a21-4119-4a05-bced-0dca8f310d4b'
 ```
 
+### Re-encrypt your current file with a new secret
+
+```
+$ hide recrypt yourNew_Ultra_Secret_secret!@#
+
+Successfully updated your encrypted file with new secret to: /Users/username/__node-hide-accounts
+```
+
 ### Get the full file path of the encrypted flat file
 
 Returns the file location on your machine where the
