@@ -20,7 +20,6 @@
   "devDependencies": {
     "babel-core": "^6.26.3",
     "babel-loader": "^7.1.1",
-    "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.7.0",
     "gulp": "^4.0.0",
     "gulp-babel": "^6.1.2",
@@ -31,6 +30,7 @@
     "webpack-stream": "^5.1.1"
   },
   "dependencies": {
+    "babel-polyfill": "^6.26.0",
     "bunyan": "^1.8.10",
     "colors": "^1.1.2",
     "columnify": "^1.5.4",
