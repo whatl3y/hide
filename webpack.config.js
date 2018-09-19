@@ -1,19 +1,17 @@
 var nodeExternals = require('webpack-node-externals')
 
 module.exports = {
-  entry: ['babel-polyfill', './src/index.js'],
+  mode: 'production',
+  entry: [  'babel-polyfill', './src/index.js' ],
   target: 'node',
   output: {
     filename: 'index.js',
   },
-  externals: [nodeExternals()],
+  externals: [ nodeExternals() ],
   module: {
-    loaders: [{
+    rules: [{
       test: /^.+\.js$/,
       loader: 'babel-loader',
-      options: {
-        presets: ['es2015']
-      }
     }]
   }
 }

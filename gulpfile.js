@@ -1,9 +1,8 @@
 const gulp = require('gulp')
-const gulpSequence = require('gulp-sequence')
 const babel = require('gulp-babel')
 const plumber = require('gulp-plumber')
 const insert = require('gulp-insert')
-const uglify = require('gulp-uglify')
+const uglify = require('gulp-uglify-es').default
 const webpack = require('webpack-stream')
 const webpack_config = require('./webpack.config.js')
 
@@ -21,4 +20,4 @@ gulp.task('index', function() {
     .pipe(gulp.dest("./dist"))
 })
 
-gulp.task('build', gulpSequence('transpile', 'index'))
+gulp.task('build', gulp.series('transpile', 'index'))
