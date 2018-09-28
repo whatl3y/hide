@@ -12,7 +12,7 @@
   },
   "scripts": {
     "build": "gulp build",
-    "test": "mocha --require babel-core/register --recursive './src/**/*.spec.js'"
+    "test": "mocha --require babel-core/register --require babel-polyfill --recursive './src/**/*.spec.js'"
   },
   "bin": {
     "hide": "./dist/index.js"
@@ -26,6 +26,7 @@
     "gulp-insert": "^0.5.0",
     "gulp-plumber": "^1.1.0",
     "gulp-uglify-es": "^1.0.4",
+    "mocha": "^5.2.0",
     "webpack-node-externals": "^1.6.0",
     "webpack-stream": "^5.1.1"
   },
@@ -37,7 +38,6 @@
     "csv": "^1.1.1",
     "es6-promisify": "^5.0.0",
     "minimist": "^1.2.0",
-    "mocha": "^5.2.0",
     "moment": "^2.22.1",
     "uuid": "^3.1.0"
   },
