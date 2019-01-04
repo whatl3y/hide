@@ -121,6 +121,15 @@ if (!config.cryptography.password) {
 
         break
 
+      case 'upgrade':
+        const upgraded = await FileHandler.upgradeFrom3To4()
+
+        if (upgraded)
+          return Vomit.success(`Successfully upgraded your flat file to work with version 4+ of hide!`)
+
+        Vomit.success(`Your local file has already been upgraded to support 4+ version of hide.`)
+        break
+
       case 'file':
         Vomit.twoLinesDifferentColors(`Your encrypted file is in the following location:`, fullPath, 'blue', 'green')
         break

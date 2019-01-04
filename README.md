@@ -1,5 +1,11 @@
 # hide
 
+**NOTE: v4.0.0 contains breaking changes from v3.x.x by strengthening
+encryption (hide now uses [crypto.createCipheriv](https://nodejs.org/docs/latest-v11.x/api/crypto.html#crypto_crypto_createcipheriv_algorithm_key_iv_options) instead of
+now deprecated crypto.createCipher).**
+
+**To upgrade to v4.0.0, run `$ hide upgrade` after updating your local package to v4.0.0 from v3.x.x**
+
 CLI utility to store and retrieve your personal account(s) information securely on your computer.
 
 ## Description

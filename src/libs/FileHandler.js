@@ -13,6 +13,21 @@ const encryption = Encryption()
 export default {
   filepath: path.join(config.filepath, config.filename),
 
+  async upgradeFrom3To4() {
+    if (this.doesDirectoryExist(config.filepath)) {
+      if (this.doesFileExist(this.filepath)) {
+        const encryptedFileData = await readFilePromise(this.filepath)
+        const inflatedString = await encryption.parseData(encryptedFileData.toString('utf8'), false)
+        if (inflatedString.toString('utf8').split(':').length === 1) {
+          const allAccountData = JSON.parse(encryption.deprecated.decrypt(inflatedString.toString('utf8')))
+          await this.writeObjToFile(allAccountData)
+          return true
+        }
+      }
+    }
+    return false
+  },
+
   async getAndDecryptFlatFile() {
     if (this.doesDirectoryExist(config.filepath)) {
       if (this.doesFileExist(this.filepath)) {

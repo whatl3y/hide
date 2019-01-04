@@ -9,33 +9,44 @@ const inflate = promisify(zlib.inflate)
 const deflate = promisify(zlib.deflate)
 
 export default function Encryption(options={}) {
+  const alg = options.algorithm || config.cryptography.algorithm
+  const sec = options.secret || config.cryptography.password
+
   return {
-    _algorithm: options.algorithm || config.cryptography.algorithm,
-    _secret:    options.secret || config.cryptography.password,
+    _algorithm: alg,
+    _secret:    sec,
 
     encrypt(text) {
-      const cipher = crypto.createCipher(this._algorithm, this._secret)
-      let crypted = cipher.update(text, 'utf8', 'hex')
-      crypted += cipher.final('hex')
-      return crypted
+      const secret      = getFilledSecret(this._secret, this.getAlgorithmKeyLength())
+      const { iv, key } = getKeyAndIV(secret)
+      const cipher      = crypto.createCipheriv(this._algorithm, key, iv)
+
+      let cipherText = cipher.update(text, 'utf8', 'hex')
+      cipherText += cipher.final('hex')
+      return `${cipherText}:${iv.toString('hex')}`
     },
 
     async encryptFileUtf8(filePath) {
       console.log('filePath', filePath)
       const fileText = await readFile(filePath, { encoding: 'utf8' })
-      return this.encrypt(fileText)
+      return await this.encrypt(fileText)
     },
 
     decrypt(text) {
-      const decipher = crypto.createDecipher(this._algorithm, this._secret)
-      let dec = decipher.update(text, 'hex', 'utf8')
+      const [ raw, ivHex ] = text.split(':')
+      const iv          = Buffer.from(ivHex, 'hex')
+      const secret      = getFilledSecret(this._secret, this.getAlgorithmKeyLength())
+      const key         = (secret instanceof Buffer) ? secret : Buffer.from(secret)
+      const decipher    = crypto.createDecipheriv(this._algorithm, key, iv)
+
+      let dec = decipher.update(raw, 'hex', 'utf8')
       dec += decipher.final('utf8')
       return dec
     },
 
     async decryptFileUtf8(filePath) {
       const fileText = await readFile(filePath, { encoding: 'utf8' })
-      return this.decrypt(fileText)
+      return await this.decrypt(fileText)
     },
 
     stringToHash(string) {
@@ -44,8 +55,8 @@ export default function Encryption(options={}) {
       return md5Sum.digest("hex")
     },
 
-    fileToHash(filePath) {
-      return new Promise((resolve, reject) => {
+    async fileToHash(filePath) {
+      return await new Promise((resolve, reject) => {
         const md5Sum = crypto.createHash("md5")
 
         const s = fs.ReadStream(filePath)
@@ -63,12 +74,66 @@ export default function Encryption(options={}) {
       let returnValue
       switch (isRawData) {
         case false:
-          return await inflate(new Buffer(value, 'base64'))
+          return await inflate(Buffer.from(value, 'base64'))
 
         default:  //true
           const compressedValue = await deflate(value)
-          return new Buffer(compressedValue).toString('base64')
+          return Buffer.from(compressedValue).toString('base64')
       }
-    }
+    },
+
+    getAlgorithmKeyLength() {
+      const map = {
+        "des-ede3": 24,
+        "aes128": 16,
+        "aes-128-cbc": 16,
+        "aes192": 24,
+        "aes256": 32
+      }
+      return map[this._algorithm]
+    },
+
+    deprecated: {
+      _algorithm: alg,
+      _secret:    sec,
+
+      encrypt(text) {
+        const cipher = crypto.createCipher(this._algorithm, this._secret)
+        let crypted = cipher.update(text, 'utf8', 'hex')
+        crypted += cipher.final('hex')
+        return crypted
+      },
+
+      async encryptFileUtf8(filePath) {
+        console.log('filePath', filePath)
+        const fileText = await readFile(filePath, { encoding: 'utf8' })
+        return this.encrypt(fileText)
+      },
+
+      decrypt(text) {
+        const decipher = crypto.createDecipher(this._algorithm, this._secret)
+        let dec = decipher.update(text, 'hex', 'utf8')
+        dec += decipher.final('utf8')
+        return dec
+      },
+
+      async decryptFileUtf8(filePath) {
+        const fileText = await readFile(filePath, { encoding: 'utf8' })
+        return this.decrypt(fileText)
+      }
+    },
   }
+}
+
+// Private methods
+function getFilledSecret(secret, numBytes=32) {
+  if (secret.length < numBytes)
+    return getFilledSecret(`${secret}_${secret}`, numBytes)
+  return secret.slice(0, numBytes)
+}
+
+function getKeyAndIV(key) {
+  const ivBuffer = crypto.randomBytes(16)
+  const keyBuffer = (key instanceof Buffer) ? key : Buffer.from(key)
+  return { iv: ivBuffer, key: keyBuffer }
 }

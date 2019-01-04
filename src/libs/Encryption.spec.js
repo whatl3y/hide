@@ -5,20 +5,20 @@ import Encryption from './Encryption.js'
 describe('Encryption', function() {
   const enc = Encryption({secret: 'abc123'})
   const originalText = 'test123'
-  let cipherText
+  let cipherTextAndIv
   let plainText
-  let hash
 
   describe('#encrypt()', function() {
     it(`should encrypt string without issue`, () => {
-      cipherText = enc.encrypt(originalText)
-      assert.equal(typeof cipherText, 'string')
+      cipherTextAndIv = enc.encrypt(originalText)
+      assert.equal(typeof cipherTextAndIv, 'string')
+      assert.equal(2, cipherTextAndIv.split(':').length)
     })
   })
 
   describe('#decrypt()', function() {
     it(`should decrypt cipher string without issue`, () => {
-      plainText = enc.decrypt(cipherText)
+      plainText = enc.decrypt(cipherTextAndIv)
       assert.equal(typeof plainText, 'string')
       assert.equal(plainText, originalText)
     })
@@ -26,7 +26,7 @@ describe('Encryption', function() {
 
   describe('#stringToHash()', function() {
     it(`should hash string without issue`, () => {
-      hash = enc.stringToHash(plainText)
+      const hash = enc.stringToHash(plainText)
       assert.equal(typeof hash, 'string')
     })
   })
