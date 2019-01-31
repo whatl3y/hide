@@ -42,8 +42,11 @@ export default {
     this.wrapInNewlines(() => console.log(str[color]), numWrappedRows)
   },
 
-  success(string) {
-    this.wrapInNewlines(() => console.log(string.green))
+  success(string, twoLineWrap=true) {
+    let wrapper = foo => foo()
+    if (twoLineWrap)
+      wrapper = this.wrapInNewlines
+    wrapper(() => console.log(string.green))
   },
 
   error(string) {

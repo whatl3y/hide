@@ -16,7 +16,7 @@ const argv = minimist(process.argv.slice(2))
 const [ command, second, third ] = argv._
 
 // we want to enforce CRYPT_SECRET to be set manually
-if (!config.cryptography.password) {
+if (!config.cryptography.password && !['file', 'version'].includes(command)) {
   Vomit.noCryptSecret()
   process.exit()
 }
@@ -37,6 +37,14 @@ if (!config.cryptography.password) {
     const fullPath    = path.join(config.filepath, config.filename)
 
     switch (command) {
+      case 'file':
+        Vomit.twoLinesDifferentColors(`Your encrypted file is in the following location:`, fullPath, 'blue', 'green')
+        break
+
+      case 'version':
+        Vomit.success(require('root-require')('package.json').version, false)
+        break
+
       case 'add':
         const accountName = name || second
         if (!accountName)
@@ -128,10 +136,6 @@ if (!config.cryptography.password) {
           return Vomit.success(`Successfully upgraded your flat file to work with version 4+ of hide!`)
 
         Vomit.success(`Your local file has already been upgraded to support 4+ version of hide.`)
-        break
-
-      case 'file':
-        Vomit.twoLinesDifferentColors(`Your encrypted file is in the following location:`, fullPath, 'blue', 'green')
         break
 
       case 'decryptfile':

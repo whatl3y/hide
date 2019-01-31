@@ -39,6 +39,7 @@
     "es6-promisify": "^5.0.0",
     "minimist": "^1.2.0",
     "moment": "^2.22.1",
+    "root-require": "^0.3.1",
     "uuid": "^3.1.0"
   },
   "author": "Lance Whatley <whatley@outlook.com> (https://www.lance.to)",
