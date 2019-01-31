@@ -27,7 +27,6 @@ export default function Encryption(options={}) {
     },
 
     async encryptFileUtf8(filePath) {
-      console.log('filePath', filePath)
       const fileText = await readFile(filePath, { encoding: 'utf8' })
       return await this.encrypt(fileText)
     },
@@ -105,7 +104,6 @@ export default function Encryption(options={}) {
       },
 
       async encryptFileUtf8(filePath) {
-        console.log('filePath', filePath)
         const fileText = await readFile(filePath, { encoding: 'utf8' })
         return this.encrypt(fileText)
       },
