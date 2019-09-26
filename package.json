@@ -1,6 +1,6 @@
 {
   "name": "hide",
-  "version": "4.0.2",
+  "version": "4.1.0",
   "description": "CLI utility to store and retrieve account information securely on your machine.",
   "engines": {
     "node": ">= 8.0.0"
