@@ -15,7 +15,7 @@ gulp.task('transpile', function() {
 })
 
 gulp.task('index', function() {
-  return gulp.src("./dist/index.js")
+  return gulp.src("./dist/hide")
     .pipe(insert.prepend("#!/usr/bin/env node\n\n"))
     .pipe(gulp.dest("./dist"))
 })
