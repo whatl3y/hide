@@ -17,10 +17,10 @@
     "hide": "./dist/hide"
   },
   "devDependencies": {
-    "@babel/core": "^7.4.3",
-    "@babel/preset-env": "^7.4.3",
-    "@babel/register": "^7.4.0",
-    "gulp": "^4.0.0",
+    "@babel/core": "^7.7.7",
+    "@babel/preset-env": "^7.7.7",
+    "@babel/register": "^7.7.7",
+    "gulp": "^4.0.2",
     "gulp-babel": "^8.0.0",
     "gulp-insert": "^0.5.0",
     "gulp-plumber": "^1.2.1",
@@ -30,7 +30,7 @@
     "webpack-stream": "^5.2.1"
   },
   "dependencies": {
-    "babel-loader": "^8.0.5",
+    "babel-loader": "^8.0.6",
     "bunyan": "^1.8.10",
     "colors": "^1.1.2",
     "columnify": "^1.5.4",
