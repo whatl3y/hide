@@ -2,11 +2,43 @@
 
 Open source, AES-256 bit encrypted password manager with all encrypted passwords stored locally on your machine.
 
+## Usage
+
+```
+$ hide search my_new_account
+# I found the following accounts:
+#
+# 0 of 412 total accounts returned
+
+$ hide add -n my_new_account -u myname -p the_secret_password -e "Some extra stuff!!!!"
+# Successfully added account 'my_new_account'!
+
+$ hide search my_new_account
+# I found the following accounts:
+# NAME            USERNAME        EXTRA            UUID
+# my_new_account  myname          Some extra stuff 964c0e29-9732-4f03-9920-86b35cd04afe
+# 1 of 413 total accounts returned
+
+$ hide show my_new_account
+# NAME            USERNAME        EXTRA            UUID
+# my_new_account  myname          Some extra stuff 964c0e29-9732-4f03-9920-86b35cd04afe
+
+$ hide show my_new_account -p
+# NAME            USERNAME        PASSWORD            EXTRA            UUID
+# my_new_account  myname          the_secret_password Some extra stuff 964c0e29-9732-4f03-9920-86b35cd04afe
+```
+
 ## Description
 
 This is a CLI utility that can be used to store your account information,
 including websites, usernames, passwords, and additional info, securely using
 AES-256 bit encryption using a master secret that you configure.
+
+## Install
+
+```
+$ npm install -g hide
+```
 
 ## Why?
 
@@ -17,12 +49,6 @@ but I'm a developer so basically always live in a terminal window.
 This tool gives me the freedom to retrieve a username and/or password (among other information)
 about an account with a single command, and store it on my machine using AES-256
 bit encryption with a password I set.
-
-## Install
-
-```
-$ npm install -g hide
-```
 
 ## Config
 
