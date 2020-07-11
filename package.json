@@ -1,6 +1,6 @@
 {
   "name": "hide",
-  "version": "5.0.1",
+  "version": "5.0.2",
   "description": "Open source, AES-256 bit encrypted password manager with all encrypted passwords stored locally on your machine.",
   "author": "Lance Whatley <whatl3y@gmail.com> (https://lance.to)",
   "license": "MIT",
