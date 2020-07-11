@@ -15,17 +15,17 @@ $ hide add -n my_new_account -u myname -p the_secret_password -e "Some extra stu
 
 $ hide search my_new_account
 # I found the following accounts:
-# NAME            USERNAME        EXTRA            UUID
-# my_new_account  myname          Some extra stuff 964c0e29-9732-4f03-9920-86b35cd04afe
+# NAME            USERNAME        EXTRA                UUID
+# my_new_account  myname          Some extra stuff!!!! 964c0e29-9732-4f03-9920-86b35cd04afe
 # 1 of 413 total accounts returned
 
 $ hide show my_new_account
-# NAME            USERNAME        EXTRA            UUID
-# my_new_account  myname          Some extra stuff 964c0e29-9732-4f03-9920-86b35cd04afe
+# NAME            USERNAME        EXTRA                UUID
+# my_new_account  myname          Some extra stuff!!!! 964c0e29-9732-4f03-9920-86b35cd04afe
 
 $ hide show my_new_account -p
-# NAME            USERNAME        PASSWORD            EXTRA            UUID
-# my_new_account  myname          the_secret_password Some extra stuff 964c0e29-9732-4f03-9920-86b35cd04afe
+# NAME            USERNAME        PASSWORD            EXTRA                UUID
+# my_new_account  myname          the_secret_password Some extra stuff!!!! 964c0e29-9732-4f03-9920-86b35cd04afe
 ```
 
 ## Description
