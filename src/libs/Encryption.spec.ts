@@ -1,14 +1,14 @@
 import path from 'path'
 import assert from 'assert'
-import Encryption from './Encryption.js'
+import Encryption from './Encryption'
 
-describe('Encryption', function() {
-  const enc = Encryption({secret: 'abc123'})
+describe('Encryption', function () {
+  const enc = Encryption({ secret: 'abc123' })
   const originalText = 'test123'
-  let cipherTextAndIv
-  let plainText
+  let cipherTextAndIv: any
+  let plainText: string
 
-  describe('#encrypt()', function() {
+  describe('#encrypt()', function () {
     it(`should encrypt string without issue`, () => {
       cipherTextAndIv = enc.encrypt(originalText)
       assert.equal(typeof cipherTextAndIv, 'string')
@@ -16,7 +16,7 @@ describe('Encryption', function() {
     })
   })
 
-  describe('#decrypt()', function() {
+  describe('#decrypt()', function () {
     it(`should decrypt cipher string without issue`, () => {
       plainText = enc.decrypt(cipherTextAndIv)
       assert.equal(typeof plainText, 'string')
@@ -24,16 +24,16 @@ describe('Encryption', function() {
     })
   })
 
-  describe('#stringToHash()', function() {
+  describe('#stringToHash()', function () {
     it(`should hash string without issue`, () => {
       const hash = enc.stringToHash(plainText)
       assert.equal(typeof hash, 'string')
     })
   })
 
-  describe('#fileToHash()', function() {
+  describe('#fileToHash()', function () {
     it(`should hash file contents without errors`, async () => {
-      await enc.fileToHash(path.join(__dirname, 'Encryption.js'))
+      await enc.fileToHash(path.join(__dirname, 'Encryption.ts'))
     })
   })
 
@@ -42,8 +42,11 @@ describe('Encryption', function() {
 
     it('should be a valid base64 string on deflate, then be a valid Buffer and the correct value on inflate', async () => {
       const base64string = await enc.parseData('lance123')
-      const buff         = await enc.parseData(base64string, false)
-      const lance123     = buff.toString()
+      if (typeof base64string !== 'string')
+        throw new Error('needs to be string')
+
+      const buff = await enc.parseData(base64string, false)
+      const lance123 = buff.toString()
 
       assert.equal(true, typeof base64string === 'string')
       assert.equal(true, buff instanceof Buffer)

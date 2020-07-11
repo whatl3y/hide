@@ -1,6 +1,6 @@
 # hide
 
-CLI utility to store and retrieve your personal account(s) information securely on your computer.
+Open source, AES-256 bit encrypted password manager with all encrypted passwords stored locally on your machine.
 
 ## Description
 
@@ -27,7 +27,8 @@ $ npm install -g hide
 ## Config
 
 #### CRYPT_SECRET (required)
-The following should be set to control the global secret that's used with AES-256 to secure the data stored on your machine.
+
+The following should be set to control the global secret that's used with AES-256 bit encryption to secure the data stored on your machine.
 
 **DON'T LOSE/FORGET THIS**
 
@@ -36,6 +37,7 @@ $ export CRYPT_SECRET=[your all time master secret value]
 ```
 
 #### NODE_HIDE_FILEPATH
+
 Directory where the encrypted file will live -- default: home directory (either process.env.HOME on unix/linux/mac or process.env.USERPROFILE on windows)
 
 ```
@@ -43,6 +45,7 @@ $ export NODE_HIDE_FILEPATH=~
 ```
 
 #### NODE_HIDE_FILENAME
+
 Name of flat file that holds the encrypted data of your accounts -- default: '\_\_node-hide-accounts'
 
 ```
@@ -71,14 +74,14 @@ Successfully added account 'my_new_account'!
 #### PARAMETERS
 
 - -s / --search (optional): An optional term to look for accounts based on
-a case-insensitive search against the NAME or USERNAME.
-NOTE: the `search` command never shows the password for the account. Use `show` to retrieve the password.
+  a case-insensitive search against the NAME or USERNAME.
+  NOTE: the `search` command never shows the password for the account. Use `show` to retrieve the password.
 
 ```
 $ hide search
 
 I found the following accounts:
-NAME                USERNAME        EXTRA            UUID                                
+NAME                USERNAME        EXTRA            UUID
 facebook.com        userna                           def7f984-c2d7-4069-907c-facfad597123
 instagram.com       iguser                           def7f984-abc1-1111-2222-facfad597123
 2 of 2 total accounts returned
@@ -86,7 +89,7 @@ instagram.com       iguser                           def7f984-abc1-1111-2222-fac
 $ hide search -s facebook
 
 I found the following accounts:
-NAME                USERNAME        EXTRA            UUID                                
+NAME                USERNAME        EXTRA            UUID
 facebook.com        userna                           def7f984-c2d7-4069-907c-facfad597123
 1 of 2 total accounts returned
 ```
@@ -94,34 +97,40 @@ facebook.com        userna                           def7f984-c2d7-4069-907c-fac
 ### Show a single account
 
 #### PARAMETERS
+
 Either uuid or name are at least required:
+
 - -i / --uuid: The unique identifier of the account you want to review.
 - -n / --name: The name of the account you're reviewing.
 
 Optional
+
 - -p / --password (optional): Whether to show the password. DEFAULT: false
 
 ```
 $ hide show -i f62d5a21-4119-4a05-bced-0dca8f310d4b
 $ hide show -n facebook.com
 
-NAME            USERNAME        EXTRA           UUID                                
+NAME            USERNAME        EXTRA           UUID
 facebook.com    fbuser                          f62d5a21-4119-4a05-bced-0dca8f310d4b
 
 $ hide show -n facebook.com -p
 
-NAME            USERNAME        PASSWORD        EXTRA           UUID                                
+NAME            USERNAME        PASSWORD        EXTRA           UUID
 facebook.com    fbuser          my_password1                    f62d5a21-4119-4a05-bced-0dca8f310d4b
 ```
 
 ### Update an account
 
 #### PARAMETERS
+
 Either uuid or name are at least required:
+
 - -i / --uuid: The unique identifier of the account you want to update.
 - -n / --name: The name of the account you're updating.
 
 Optional
+
 - -u / --username (optional): The username for the account.
 - -p / --password (optional): The password for the account.
 - -e / --extra (optional): Any additional information you'd like to provide about the account.
@@ -135,6 +144,7 @@ Successfully updated account with name: 'facebook.com'!
 ### Delete an account
 
 #### PARAMETERS
+
 - -i / --uuid: The unique identifier of the account you want to delete.
 
 ```
@@ -157,6 +167,7 @@ Returns the file location on your machine where the
 encrypted file lives.
 
 #### PARAMETERS
+
 None
 
 ```
@@ -173,6 +184,7 @@ information, and stores it on disk in the same location as your file
 with an appended '.json' to the file name.
 
 #### PARAMETERS
+
 None
 
 ```
@@ -193,6 +205,7 @@ Note: This requires the CSV have headers that match the following:
 - `extra`: any desired extra information you want to store with the account
 
 #### PARAMETERS
+
 - -f / --filepath: The full filepath of the CSV that we're importing data from.
 
 ```
@@ -204,6 +217,7 @@ Successfully added 123 accounts from CSV: /Users/yourname/myfile.csv!
 ### Encrypt text or a file
 
 #### PARAMETERS
+
 - -t / --text: Text you want to encrypt.
 - -f / --file: A local file path containing data you want to encrypt.
 
@@ -217,6 +231,7 @@ $ hide encrypt testing123
 ### Decrypt text or a file
 
 #### PARAMETERS
+
 - -t / --text: Text you want to decrypt.
 - -f / --file: A local file path containing data you want to decrypt.
 
