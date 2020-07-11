@@ -9,21 +9,23 @@ const inflate: any = promisify(zlib.inflate)
 const deflate: any = promisify(zlib.deflate)
 
 export default function Encryption(options: any = {}) {
-  const alg = options.algorithm || config.cryptography.algorithm
+  const alg = 'aes-256-ctr'
   const sec = options.secret || config.cryptography.password
 
   return {
     _algorithm: alg,
     _secret: sec,
 
-    encrypt(text: string) {
-      const secret = getFilledSecret(this._secret, this.getAlgorithmKeyLength())
+    async encrypt(input: Buffer | string) {
+      const secret = getFilledSecret(this._secret)
       const { iv, key } = getKeyAndIV(secret)
       const cipher = crypto.createCipheriv(this._algorithm, key, iv)
 
-      let cipherText = cipher.update(text, 'utf8', 'hex')
-      cipherText += cipher.final('hex')
-      return `${cipherText}:${iv.toString('hex')}`
+      const inputStr =
+        input instanceof Buffer ? input.toString('base64') : input
+      let cipherText = cipher.update(inputStr, 'utf8', 'base64')
+      cipherText += cipher.final('base64')
+      return await this.parseData(`${cipherText}:${iv.toString('base64')}`)
     },
 
     async encryptFileUtf8(filePath: string) {
@@ -31,14 +33,15 @@ export default function Encryption(options: any = {}) {
       return await this.encrypt(fileText)
     },
 
-    decrypt(text: string) {
-      const [raw, ivHex] = text.split(':')
-      const iv = Buffer.from(ivHex, 'hex')
-      const secret = getFilledSecret(this._secret, this.getAlgorithmKeyLength())
-      const key = secret instanceof Buffer ? secret : Buffer.from(secret)
+    async decrypt(text: string) {
+      const inflatedString = (await this.parseData(text, false)).toString()
+      const [rawBase64, ivBase64] = inflatedString.split(':')
+      const iv = Buffer.from(ivBase64, 'base64')
+      const secret = getFilledSecret(this._secret)
+      const { key } = getKeyAndIV(secret, iv)
       const decipher = crypto.createDecipheriv(this._algorithm, key, iv)
 
-      let dec = decipher.update(raw, 'hex', 'utf8')
+      let dec = decipher.update(rawBase64, 'base64', 'utf8')
       dec += decipher.final('utf8')
       return dec
     },
@@ -48,20 +51,14 @@ export default function Encryption(options: any = {}) {
       return await this.decrypt(fileText)
     },
 
-    stringToHash(str: string) {
-      const md5Sum = crypto.createHash('md5')
-      md5Sum.update(str)
-      return md5Sum.digest('hex')
-    },
-
     async fileToHash(filePath: string) {
       return await new Promise((resolve, reject) => {
-        const md5Sum = crypto.createHash('md5')
+        const sha256Sum = crypto.createHash('sha256')
 
         const s = fs.createReadStream(filePath)
-        s.on('data', (data) => md5Sum.update(data))
+        s.on('data', (data) => sha256Sum.update(data))
         s.on('error', reject)
-        s.on('end', () => resolve(md5Sum.digest('hex')))
+        s.on('end', () => resolve(sha256Sum.digest('base64')))
       })
     },
 
@@ -73,7 +70,6 @@ export default function Encryption(options: any = {}) {
       value: string,
       isRawData: boolean = true
     ): Promise<Buffer | string> {
-      let returnValue
       switch (isRawData) {
         case false:
           return await inflate(Buffer.from(value, 'base64'))
@@ -84,58 +80,21 @@ export default function Encryption(options: any = {}) {
           return Buffer.from(compressedValue as any).toString('base64')
       }
     },
-
-    getAlgorithmKeyLength() {
-      const map: any = {
-        'des-ede3': 24,
-        aes128: 16,
-        'aes-128-cbc': 16,
-        aes192: 24,
-        aes256: 32,
-      }
-      return map[this._algorithm]
-    },
-
-    deprecated: {
-      _algorithm: alg,
-      _secret: sec,
-
-      encrypt(text: string) {
-        const cipher = crypto.createCipher(this._algorithm, this._secret)
-        let crypted = cipher.update(text, 'utf8', 'hex')
-        crypted += cipher.final('hex')
-        return crypted
-      },
-
-      async encryptFileUtf8(filePath: string) {
-        const fileText = await readFile(filePath, { encoding: 'utf8' })
-        return this.encrypt(fileText)
-      },
-
-      decrypt(text: string) {
-        const decipher = crypto.createDecipher(this._algorithm, this._secret)
-        let dec = decipher.update(text, 'hex', 'utf8')
-        dec += decipher.final('utf8')
-        return dec
-      },
-
-      async decryptFileUtf8(filePath: string) {
-        const fileText = await readFile(filePath, { encoding: 'utf8' })
-        return this.decrypt(fileText)
-      },
-    },
   }
 }
 
 // Private methods
-function getFilledSecret(secret: string, numBytes = 32): Buffer | string {
-  if (secret.length < numBytes)
-    return getFilledSecret(`${secret}_${secret}`, numBytes)
-  return secret.slice(0, numBytes)
+function getFilledSecret(secret: string): string {
+  const sha256Sum = crypto.createHash('sha256')
+  sha256Sum.update(secret)
+  return sha256Sum.digest('base64')
 }
 
-function getKeyAndIV(key: Buffer | string) {
-  const ivBuffer = crypto.randomBytes(16)
-  const keyBuffer = key instanceof Buffer ? key : Buffer.from(key)
-  return { iv: ivBuffer, key: keyBuffer }
+function getKeyAndIV(key: string, iv?: Buffer) {
+  const ivBuffer = iv || crypto.randomBytes(16)
+  const derivedKey = crypto.pbkdf2Sync(key, ivBuffer, 1e5, 32, 'sha256')
+  return {
+    iv: ivBuffer,
+    key: derivedKey,
+  }
 }

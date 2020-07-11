@@ -5,8 +5,7 @@ interface IConfig {
 }
 
 interface IConfigCrypto {
-  algorithm: string
-  password: string
+  password: string | undefined
 }
 
 const config: IConfig = {
@@ -14,8 +13,7 @@ const config: IConfig = {
   filename: process.env.NODE_HIDE_FILENAME || '__node-hide-accounts',
 
   cryptography: {
-    algorithm: process.env.CRYPT_ALGORITHM || 'aes-256-ctr',
-    password: process.env.CRYPT_SECRET || 'hide',
+    password: process.env.CRYPT_SECRET,
   },
 }
 

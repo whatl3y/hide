@@ -12,40 +12,15 @@ const encryption = Encryption()
 export default {
   filepath: path.join(config.filepath, config.filename),
 
-  async upgradeFrom3To4() {
-    if (this.doesDirectoryExist(config.filepath)) {
-      if (this.doesFileExist(this.filepath)) {
-        const encryptedFileData = await readFilePromise(this.filepath)
-        const inflatedString = await encryption.parseData(
-          encryptedFileData.toString('utf8'),
-          false
-        )
-        if (inflatedString.toString('utf8').split(':').length === 1) {
-          const allAccountData = JSON.parse(
-            encryption.deprecated.decrypt(inflatedString.toString('utf8'))
-          )
-          await this.writeObjToFile(allAccountData)
-          return true
-        }
-      }
-    }
-    return false
-  },
-
   async getAndDecryptFlatFile() {
     if (this.doesDirectoryExist(config.filepath)) {
       if (this.doesFileExist(this.filepath)) {
-        const rawFileData = await readFilePromise(this.filepath)
+        const rawFileData = await readFilePromise(this.filepath, 'utf-8')
         if (rawFileData.length === 0) return null
         else {
-          const inflatedString = await encryption.parseData(
-            rawFileData.toString('utf8'),
-            false
-          )
-
           try {
             const accountsJson = JSON.parse(
-              encryption.decrypt(inflatedString.toString('utf8'))
+              await encryption.decrypt(rawFileData)
             )
             return accountsJson
           } catch (err) {
@@ -68,9 +43,8 @@ export default {
 
   async writeObjToFile(obj: any, origObj = {}) {
     const newObj = Object.assign(origObj, obj)
-    const encryptedString = encryption.encrypt(JSON.stringify(newObj))
-    const deflatedString = await encryption.parseData(encryptedString)
-    return await writeFilePromise(this.filepath, deflatedString)
+    const encryptedString = await encryption.encrypt(JSON.stringify(newObj))
+    return await writeFilePromise(this.filepath, encryptedString)
   },
 
   doesDirectoryExist(dirPath: string): boolean {

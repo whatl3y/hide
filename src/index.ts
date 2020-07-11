@@ -12,7 +12,7 @@ import config from './config'
 const writeFile = fs.promises.writeFile
 
 const argv = minimist(process.argv.slice(2))
-const [command, second, third] = argv._
+const [command, second] = argv._
 
 // we want to enforce CRYPT_SECRET to be set manually
 if (!config.cryptography.password && !['file', 'version'].includes(command)) {
@@ -173,19 +173,6 @@ if (!config.cryptography.password && !['file', 'version'].includes(command)) {
 
         break
 
-      case 'upgrade':
-        const upgraded = await FileHandler.upgradeFrom3To4()
-
-        if (upgraded)
-          return Vomit.success(
-            `Successfully upgraded your flat file to work with version 4+ of hide!`
-          )
-
-        Vomit.success(
-          `Your local file has already been upgraded to support 4+ version of hide.`
-        )
-        break
-
       case 'decryptfile':
         const answer = await Readline().ask(
           'Are you sure you want to decrypt your file and save it to disk (yes/no): '
@@ -204,11 +191,10 @@ if (!config.cryptography.password && !['file', 'version'].includes(command)) {
         const dest = path.join(config.filepath, config.filename)
         const encryption2 = Encryption({ secret: second })
         const currentFileData = await FileHandler.getAndDecryptFlatFile()
-        const encryptedString = encryption2.encrypt(
+        const encryptedString = await encryption2.encrypt(
           JSON.stringify(currentFileData)
         )
-        const deflatedString = await encryption2.parseData(encryptedString)
-        await writeFile(dest, deflatedString)
+        await writeFile(dest, encryptedString)
         Vomit.success(
           `Successfully updated your encrypted file with new secret to: ${dest}`
         )
@@ -259,11 +245,11 @@ if (!config.cryptography.password && !['file', 'version'].includes(command)) {
         const plain = text || second
         let cipherText
         if (plain) {
-          cipherText = encryption.encrypt(plain)
-          Vomit.success(cipherText)
+          cipherText = await encryption.encrypt(plain)
+          Vomit.success(cipherText.toString())
         } else if (file) {
           cipherText = await encryption.encryptFileUtf8(file)
-          Vomit.success(cipherText)
+          Vomit.success(cipherText.toString())
         } else {
           Vomit.error(
             `Please enter text (-t or --text) or a file path (-f or --file) to encrypt text.`
@@ -275,7 +261,7 @@ if (!config.cryptography.password && !['file', 'version'].includes(command)) {
         const cipher = text || second
         let plainText
         if (cipher) {
-          plainText = encryption.decrypt(cipher)
+          plainText = await encryption.decrypt(cipher)
           Vomit.success(plainText)
         } else if (file) {
           plainText = await encryption.decryptFileUtf8(file)

@@ -9,25 +9,18 @@ describe('Encryption', function () {
   let plainText: string
 
   describe('#encrypt()', function () {
-    it(`should encrypt string without issue`, () => {
-      cipherTextAndIv = enc.encrypt(originalText)
+    it(`should encrypt string without issue`, async () => {
+      cipherTextAndIv = await enc.encrypt(originalText)
       assert.equal(typeof cipherTextAndIv, 'string')
-      assert.equal(2, cipherTextAndIv.split(':').length)
+      // assert.equal(2, cipherTextAndIv.split(':').length)
     })
   })
 
   describe('#decrypt()', function () {
-    it(`should decrypt cipher string without issue`, () => {
-      plainText = enc.decrypt(cipherTextAndIv)
+    it(`should decrypt cipher string without issue`, async () => {
+      plainText = await enc.decrypt(cipherTextAndIv)
       assert.equal(typeof plainText, 'string')
       assert.equal(plainText, originalText)
-    })
-  })
-
-  describe('#stringToHash()', function () {
-    it(`should hash string without issue`, () => {
-      const hash = enc.stringToHash(plainText)
-      assert.equal(typeof hash, 'string')
     })
   })
 
