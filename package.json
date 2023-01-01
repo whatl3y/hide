@@ -33,7 +33,7 @@
     "ts-node": "^8.10.2",
     "typescript": "^3.9.6",
     "webpack-node-externals": "^2.3.0",
-    "webpack-stream": "^5.2.1"
+    "webpack-stream": "^7.0.0"
   },
   "dependencies": {
     "bunyan": "^1.8.14",
