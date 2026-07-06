@@ -11,7 +11,33 @@ import config from './config'
 
 const writeFile = fs.promises.writeFile
 
-const argv = minimist(process.argv.slice(2))
+// treat all values as strings so minimist doesn't coerce numeric-looking
+// values to numbers (destroying leading zeros) or value-less flags to
+// booleans. A value-less flag (e.g. `hide add -n`) becomes '' instead of
+// true so the required-parameter guards below catch it.
+const argv = minimist(process.argv.slice(2), {
+  string: [
+    '_',
+    'n',
+    'name',
+    'u',
+    'username',
+    'p',
+    'password',
+    'e',
+    'extra',
+    't',
+    'text',
+    'f',
+    'file',
+    'i',
+    'id',
+    'uuid',
+    's',
+    'search',
+    'filepath',
+  ],
+})
 const [command, second] = argv._
 
 // we want to enforce CRYPT_SECRET to be set manually
@@ -22,15 +48,24 @@ if (!config.cryptography.password && !['file', 'version'].includes(command)) {
 
 ;(async () => {
   try {
-    const extra = argv.e || argv.extra
-    const name = argv.n || argv.name
-    const password = argv.p || argv.password
-    const uid = argv.i || argv.id || argv.uuid
-    const username = argv.u || argv.username
+    // minimist returns an array when a flag is repeated (e.g. `-p a -p b`);
+    // take the last occurrence so a single string flows downstream
+    const lastValue = (val: any) =>
+      Array.isArray(val) ? val[val.length - 1] : val
+
+    const extra = lastValue(argv.e || argv.extra)
+    const name = lastValue(argv.n || argv.name)
+    // don't use `||` here: a value-less `-p` parses as '' and needs to
+    // survive so `show` can treat it as the "reveal password" flag
+    const password = lastValue(
+      argv.p === undefined ? argv.password : argv.p
+    )
+    const uid = lastValue(argv.i || argv.id || argv.uuid)
+    const username = lastValue(argv.u || argv.username)
 
     // encryption/decryption methods
-    const text = argv.t || argv.text
-    const file = argv.f || argv.file
+    const text = lastValue(argv.t || argv.text)
+    const file = lastValue(argv.f || argv.file)
 
     const encryption = Encryption()
     const fullPath = path.join(config.filepath, config.filename)
@@ -78,7 +113,7 @@ if (!config.cryptography.password && !['file', 'version'].includes(command)) {
         break
 
       case 'search':
-        const searchString = argv.s || argv.search || second
+        const searchString = lastValue(argv.s || argv.search) || second
         const allAccounts = await FileHandler.getAndDecryptFlatFile()
         const nameMatchInfo = await AccountMgmt.searchForAccountsByName(
           searchString,
@@ -105,10 +140,13 @@ if (!config.cryptography.password && !['file', 'version'].includes(command)) {
         break
 
       case 'show':
+        // `-p` is a value-less flag here, which minimist's string option
+        // parses as '' -- any string (including '') means "show password"
+        const shouldShowPassword = typeof password === 'string'
         if (uid) {
           const account = await AccountMgmt.findAccountByUuid(uid)
           if (account) {
-            if (!password) delete account.password
+            if (!shouldShowPassword) delete account.password
             return Vomit.listSingleAccount(account)
           }
           return Vomit.error(`We didn't find an account with uuid: ${uid}`)
@@ -116,7 +154,7 @@ if (!config.cryptography.password && !['file', 'version'].includes(command)) {
           const nameStringToTry = name || second
           const account = await AccountMgmt.findAccountByName(nameStringToTry)
           if (account) {
-            if (!password) delete account.password
+            if (!shouldShowPassword) delete account.password
             return Vomit.listSingleAccount(account)
           }
           return Vomit.error(
@@ -201,7 +239,7 @@ if (!config.cryptography.password && !['file', 'version'].includes(command)) {
         break
 
       case 'import':
-        const importFilePath = argv.f || argv.filepath || second
+        const importFilePath = file || lastValue(argv.filepath) || second
         if (importFilePath && FileHandler.doesFileExist(importFilePath)) {
           let rows = await Import.csv(importFilePath)
           let numAccountsImported = 0

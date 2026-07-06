@@ -25,10 +25,12 @@ export default {
   ) {
     const newAccount: IAccounts = {
       [this.createUuid()]: {
-        name: name,
-        username: username || '',
-        password: password || '',
-        extra: extraInfo || '',
+        // cast everything to strings in case CLI flag parsing gives us
+        // booleans (e.g. `--name` with no value) or numbers
+        name: String(name),
+        username: String(username || ''),
+        password: String(password || ''),
+        extra: String(extraInfo || ''),
       },
     }
     const rawAccountInfo = await FileHandler.getAndDecryptFlatFile()
@@ -42,12 +44,18 @@ export default {
   ) {
     const updatedAccount = {
       [uuid]: {
-        name: updatedInformation.name || originalInformation.name || '',
-        username:
-          updatedInformation.username || originalInformation.username || '',
-        password:
-          updatedInformation.password || originalInformation.password || '',
-        extra: updatedInformation.extra || originalInformation.extra || '',
+        name: String(
+          updatedInformation.name || originalInformation.name || ''
+        ),
+        username: String(
+          updatedInformation.username || originalInformation.username || ''
+        ),
+        password: String(
+          updatedInformation.password || originalInformation.password || ''
+        ),
+        extra: String(
+          updatedInformation.extra || originalInformation.extra || ''
+        ),
       },
     }
     const rawAccountInfo = await FileHandler.getAndDecryptFlatFile()
@@ -76,8 +84,9 @@ export default {
     const currentAccounts = await FileHandler.getAndDecryptFlatFile()
     if (!currentAccounts) return false
 
+    const searchName = String(name).toLowerCase()
     const matchingUuid = Object.keys(currentAccounts).filter(
-      (uuid) => currentAccounts[uuid].name.toLowerCase() == name.toLowerCase()
+      (uuid) => String(currentAccounts[uuid].name).toLowerCase() == searchName
     )[0]
 
     if (!matchingUuid) return false
@@ -120,16 +129,16 @@ export default {
       }
     }
 
+    const searchRegexp = searchString ? getSearchRegexp(searchString) : null
     const uuids = Object.keys(currentAccounts)
     const totalNumAccounts = uuids.length
     const matchingAccounts = uuids
       .map((uuid) => {
         const account: IAccountInfo = (currentAccounts as IAccounts)[uuid]
         if (!account) return null
-        if (searchString) {
-          const searchRegexp = new RegExp(searchString, 'i')
+        if (searchRegexp) {
           const fieldMatches =
-            account[field] && searchRegexp.test(account[field])
+            account[field] && searchRegexp.test(String(account[field]))
           if (fieldMatches) return Object.assign(account, { uuid: uuid })
           return null
         }
@@ -144,6 +153,22 @@ export default {
   },
 
   sortByName(acc1: IAccountInfo, acc2: IAccountInfo) {
-    return acc1.name.toLowerCase() < acc2.name.toLowerCase() ? -1 : 1
+    return String(acc1.name).toLowerCase() < String(acc2.name).toLowerCase()
+      ? -1
+      : 1
   },
+}
+
+// Private methods
+function getSearchRegexp(searchString: string): RegExp {
+  try {
+    return new RegExp(searchString, 'i')
+  } catch (err) {
+    // not a valid regular expression (e.g. searching for "(personal"),
+    // so escape it and match the search string literally
+    return new RegExp(
+      String(searchString).replace(/[.*+?^${}()|[\]\\]/g, '\\$&'),
+      'i'
+    )
+  }
 }
