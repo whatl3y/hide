@@ -40,6 +40,8 @@ AES-256 bit encryption using a master secret that you configure.
 
 ## Install
 
+Requires Node.js 22 or later.
+
 ```
 $ npm install -g hide
 ```
@@ -275,15 +277,20 @@ testing123
 ## Development
 
 If you want to clone and add/update functionality, you can build
-using the following.
+using the following. Development requires Node.js 24 or later (tests
+run the TypeScript source directly via Node's native type stripping).
 
 ### Build
+
+Compiles the TypeScript in `src/` to `dist/` with `tsc` (no bundler).
 
 ```
 $ npm run build
 ```
 
 ### Tests
+
+Runs the `*.spec.ts` files with Node's built-in test runner.
 
 ```
 $ npm test

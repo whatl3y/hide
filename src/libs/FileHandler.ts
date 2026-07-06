@@ -1,7 +1,7 @@
 import fs from 'fs'
 import path from 'path'
-import Encryption from './Encryption'
-import config from '../config'
+import Encryption from './Encryption.ts'
+import config from '../config.ts'
 
 const mkdirPromise = fs.promises.mkdir
 const writeFilePromise = fs.promises.writeFile

@@ -1,22 +1,33 @@
-import 'colors'
+import { styleText } from 'util'
 import columnify from 'columnify'
-import { IAccountInfo } from './AccountMgmt'
+import type { IAccountInfo } from './AccountMgmt.ts'
 
 const NOOP = () => {}
+
+// coerce to string defensively (CLI parsing can hand us non-strings) --
+// styleText throws on non-string input, unlike the old `colors` library
+function colorize(color: any, text: any): string {
+  return styleText(color, String(text))
+}
 
 export default {
   noCryptSecret() {
     this.wrapInNewlines(() => {
-      console.log(`You don't have environment variable CRYPT_SECRET set.`.red)
       console.log(
-        `>export CRYPT_SECRET=[your all time master secret value]`.green
+        colorize('red', `You don't have environment variable CRYPT_SECRET set.`)
+      )
+      console.log(
+        colorize(
+          'green',
+          `>export CRYPT_SECRET=[your all time master secret value]`
+        )
       )
     })
   },
 
   listSingleAccount(accountRecord: IAccountInfo) {
     this.wrapInNewlines(() =>
-      console.log(this.columnify([accountRecord]).green)
+      console.log(colorize('green', this.columnify([accountRecord])))
     )
   },
 
@@ -29,11 +40,13 @@ export default {
     })
 
     this.wrapInNewlines(() => {
-      console.log('I found the following accounts:'.blue)
-      console.log(this.columnify(accounts).green)
+      console.log(colorize('blue', 'I found the following accounts:'))
+      console.log(colorize('green', this.columnify(accounts)))
       console.log(
-        `${accountsAry.length} of ${totalNumAccounts} total accounts returned`
-          .blue
+        colorize(
+          'blue',
+          `${accountsAry.length} of ${totalNumAccounts} total accounts returned`
+        )
       )
     })
   },
@@ -45,23 +58,23 @@ export default {
     color2: any = 'green'
   ) {
     this.wrapInNewlines(() => {
-      if (str1.length > 0) console.log(str1[color1])
-      if (str2.length > 0) console.log(str2[color2])
+      if (str1.length > 0) console.log(colorize(color1, str1))
+      if (str2.length > 0) console.log(colorize(color2, str2))
     })
   },
 
   singleLine(str: string, color: any = 'blue', numWrappedRows = 1) {
-    this.wrapInNewlines(() => console.log(str[color]), numWrappedRows)
+    this.wrapInNewlines(() => console.log(colorize(color, str)), numWrappedRows)
   },
 
   success(string: string, twoLineWrap = true) {
     let wrapper = (foo: any) => foo()
     if (twoLineWrap) wrapper = this.wrapInNewlines
-    wrapper(() => console.log(string.green))
+    wrapper(() => console.log(colorize('green', string)))
   },
 
   error(string: string) {
-    this.wrapInNewlines(() => console.log(string.red))
+    this.wrapInNewlines(() => console.log(colorize('red', string)))
   },
 
   wrapInNewlines(functionToWriteMoreOutput = NOOP, howMany = 1) {

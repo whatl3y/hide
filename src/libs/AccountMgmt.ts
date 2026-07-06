@@ -1,5 +1,5 @@
-import { v4 as uuidv4 } from 'uuid'
-import FileHandler from './FileHandler'
+import { randomUUID } from 'crypto'
+import FileHandler from './FileHandler.ts'
 
 export interface IAccounts {
   [uid: string]: IAccountInfo
@@ -8,13 +8,14 @@ export interface IAccounts {
 export interface IAccountInfo {
   name: string
   username: string
-  password: string
+  // optional because listing paths delete it before display
+  password?: string
   extra: string
 }
 
 export default {
   createUuid() {
-    return uuidv4()
+    return randomUUID()
   },
 
   async addAccount(

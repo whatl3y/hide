@@ -1,6 +1,7 @@
+import { describe, it } from 'node:test'
 import path from 'path'
 import assert from 'assert'
-import Encryption from './Encryption'
+import Encryption from './Encryption.ts'
 
 describe('Encryption', function () {
   const enc = Encryption({ secret: 'abc123' })
@@ -26,7 +27,7 @@ describe('Encryption', function () {
 
   describe('#fileToHash()', function () {
     it(`should hash file contents without errors`, async () => {
-      await enc.fileToHash(path.join(__dirname, 'Encryption.ts'))
+      await enc.fileToHash(path.join(import.meta.dirname, 'Encryption.ts'))
     })
   })
 

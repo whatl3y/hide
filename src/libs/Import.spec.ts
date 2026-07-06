@@ -1,8 +1,9 @@
+import { describe, it, before, after } from 'node:test'
 import assert from 'assert'
 import fs from 'fs'
 import os from 'os'
 import path from 'path'
-import Import from './Import'
+import Import from './Import.ts'
 
 describe('Import', function () {
   describe('#csv()', function () {

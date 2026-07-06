@@ -2,7 +2,7 @@ import crypto from 'crypto'
 import fs from 'fs'
 import { promisify } from 'util'
 import zlib from 'zlib'
-import config from '../config'
+import config from '../config.ts'
 
 const readFile = fs.promises.readFile
 const inflate: any = promisify(zlib.inflate)

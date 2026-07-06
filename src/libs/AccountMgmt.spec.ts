@@ -1,5 +1,6 @@
+import { describe, it } from 'node:test'
 import assert from 'assert'
-import AccountMgmt from './AccountMgmt'
+import AccountMgmt from './AccountMgmt.ts'
 
 describe('AccountMgmt', function () {
   describe('#createUuid()', function () {

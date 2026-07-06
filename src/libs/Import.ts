@@ -1,5 +1,5 @@
 import fs from 'fs'
-import parse from 'csv-parse'
+import { parse } from 'csv-parse'
 
 export default {
   csv(filepath: string): Promise<any[]> {

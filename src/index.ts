@@ -1,13 +1,15 @@
+#!/usr/bin/env node
+
 import minimist from 'minimist'
 import fs from 'fs'
 import path from 'path'
-import AccountMgmt from './libs/AccountMgmt'
-import Encryption from './libs/Encryption'
-import FileHandler from './libs/FileHandler'
-import Import from './libs/Import'
-import Readline from './libs/Readline'
-import Vomit from './libs/Vomit'
-import config from './config'
+import AccountMgmt from './libs/AccountMgmt.ts'
+import Encryption from './libs/Encryption.ts'
+import FileHandler from './libs/FileHandler.ts'
+import Import from './libs/Import.ts'
+import Readline from './libs/Readline.ts'
+import Vomit from './libs/Vomit.ts'
+import config from './config.ts'
 
 const writeFile = fs.promises.writeFile
 
@@ -81,7 +83,13 @@ if (!config.cryptography.password && !['file', 'version'].includes(command)) {
         break
 
       case 'version':
-        Vomit.success(require('root-require')('package.json').version, false)
+        const packageJson = JSON.parse(
+          await fs.promises.readFile(
+            new URL('../package.json', import.meta.url),
+            'utf8'
+          )
+        )
+        Vomit.success(packageJson.version, false)
         break
 
       case 'add':
@@ -318,7 +326,7 @@ if (!config.cryptography.password && !['file', 'version'].includes(command)) {
     }
 
     process.exit()
-  } catch (err) {
+  } catch (err: any) {
     if (typeof err === 'string') {
       Vomit.error(err)
     } else if (err.toString() == 'TypeError: Bad input string') {
