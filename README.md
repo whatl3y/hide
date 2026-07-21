@@ -107,7 +107,9 @@ Successfully added account 'my_new_account'!
 
 - -s / --search (optional): An optional term to look for accounts based on
   a case-insensitive search against the NAME or USERNAME.
-  NOTE: the `search` command never shows the password for the account. Use `show` to retrieve the password.
+- -p / --password (optional): Whether to show the passwords for the matched
+  accounts. DEFAULT: false. This is a value-less flag, so put the search term
+  first (`hide search facebook -p`) or pass it with `-s` (`hide search -s facebook -p`).
 
 ```
 $ hide search
@@ -123,6 +125,13 @@ $ hide search -s facebook
 I found the following accounts:
 NAME                USERNAME        EXTRA            UUID
 facebook.com        userna                           def7f984-c2d7-4069-907c-facfad597123
+1 of 2 total accounts returned
+
+$ hide search facebook -p
+
+I found the following accounts:
+NAME                USERNAME        PASSWORD        EXTRA            UUID
+facebook.com        userna          my_password1                     def7f984-c2d7-4069-907c-facfad597123
 1 of 2 total accounts returned
 ```
 

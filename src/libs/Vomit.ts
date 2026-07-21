@@ -31,11 +31,17 @@ export default {
     )
   },
 
-  listAccounts(accountsAry: IAccountInfo[] = [], totalNumAccounts = 0) {
+  listAccounts(
+    accountsAry: IAccountInfo[] = [],
+    totalNumAccounts = 0,
+    showPasswords = false
+  ) {
     const accounts = accountsAry.map((a) => {
       if (typeof a === 'string') return { name: a }
 
-      delete a.password
+      // strip the password unless the caller explicitly asked to reveal it,
+      // so search results never leak passwords by default
+      if (!showPasswords) delete a.password
       return a
     })
 

@@ -122,6 +122,13 @@ if (!config.cryptography.password && !['file', 'version'].includes(command)) {
 
       case 'search':
         const searchString = lastValue(argv.s || argv.search) || second
+        // reveal passwords in the results with a value-less `-p`/`--password`,
+        // mirroring the `show` command. We require it be value-less ('') rather
+        // than any string: `-p` is a string option that swallows the next
+        // token, so `search -p foo` makes `password` = 'foo' -- treating that
+        // as "reveal" would dump every password when the user only meant to
+        // search for "foo". Put the term first instead: `search foo -p`.
+        const shouldShowPasswords = password === '' || password === 'true'
         const allAccounts = await FileHandler.getAndDecryptFlatFile()
         const nameMatchInfo = await AccountMgmt.searchForAccountsByName(
           searchString,
@@ -144,7 +151,7 @@ if (!config.cryptography.password && !['file', 'version'].includes(command)) {
           matches: allMatches,
           total: nameMatchInfo.total,
         }
-        Vomit.listAccounts(info.matches, info.total)
+        Vomit.listAccounts(info.matches, info.total, shouldShowPasswords)
         break
 
       case 'show':
